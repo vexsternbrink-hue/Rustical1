@@ -1,24 +1,25 @@
 /* Selbst gehostete Schriften (SIL Open Font License, siehe assets/fonts) */
 @font-face {
-  font-family: "Fraunces";
+  font-family: "Cormorant Garamond";
   font-style: normal;
-  font-weight: 100 900;
+  font-weight: 300 700;
   font-display: swap;
-  src: url("../fonts/fraunces-normal.woff2") format("woff2");
+  src: url("../fonts/cormorant-normal.woff2") format("woff2");
 }
 @font-face {
-  font-family: "Fraunces";
+  font-family: "Cormorant Garamond";
   font-style: italic;
-  font-weight: 100 900;
+  font-weight: 300 700;
   font-display: swap;
-  src: url("../fonts/fraunces-italic.woff2") format("woff2");
+  src: url("../fonts/cormorant-italic.woff2") format("woff2");
 }
 @font-face {
-  font-family: "Inter";
+  font-family: "Archivo";
   font-style: normal;
   font-weight: 100 900;
+  font-stretch: 62% 125%;
   font-display: swap;
-  src: url("../fonts/inter.woff2") format("woff2");
+  src: url("../fonts/archivo.woff2") format("woff2");
 }
 
 @tailwind base;
@@ -27,15 +28,11 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 5rem;
     -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 5rem;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    html {
-      scroll-behavior: auto;
-    }
     *,
     *::before,
     *::after {
@@ -46,11 +43,11 @@
   }
 
   body {
-    @apply bg-cream font-sans text-bark antialiased;
+    @apply bg-paper font-sans text-ink antialiased;
   }
 
   ::selection {
-    @apply bg-clay text-cream;
+    @apply bg-ink text-paper;
   }
 
   /* Sichtbarer Fokus für Tastaturnutzer (WCAG 2.4.7) */
@@ -61,77 +58,121 @@
 
 @layer components {
   .container-x {
-    @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
+    @apply mx-auto w-full max-w-site px-5 sm:px-8 lg:px-12;
   }
-  .btn {
-    @apply inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full px-6 py-3 text-base font-medium transition duration-300;
+  /* Kleine Versal-Beschriftung in schmaler Archivo */
+  .label {
+    @apply font-sans text-xs font-semibold uppercase tracking-[0.16em];
+    font-stretch: 78%;
   }
-  .btn-primary {
-    @apply bg-clay text-cream shadow-lg shadow-clay/25 hover:-translate-y-0.5 hover:bg-clayDark hover:shadow-xl hover:shadow-clay/30;
+  .display {
+    @apply font-serif font-light tracking-[-0.02em];
   }
-  .btn-ghost {
-    @apply border border-bark/20 bg-white/40 text-bark backdrop-blur hover:-translate-y-0.5 hover:border-bark/60 hover:bg-white/80;
+  .h-section {
+    @apply display text-[clamp(2.9rem,6.4vw,6.75rem)] leading-[0.92];
   }
-  .btn-light {
-    @apply bg-cream text-bark shadow-lg shadow-black/10 hover:-translate-y-0.5 hover:bg-white;
+  .lede {
+    @apply text-pretty text-[1.0625rem] leading-[1.65] text-inkSoft;
   }
-  .eyebrow {
-    @apply inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.22em] text-clay;
+
+  /* Linie unter Links, die beim Hover wegläuft und neu gezeichnet wird */
+  .link-u {
+    @apply relative inline-flex items-center gap-2 pb-1;
+    background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat;
+    transition: background-size 0.6s cubic-bezier(0.77, 0, 0.18, 1);
   }
-  .eyebrow::before {
+  .link-u:hover {
+    background-position: 100% 100%;
+    background-size: 0% 1px;
+  }
+
+  /* Eckiger Button, füllt sich beim Hover von unten */
+  .btn-line {
+    @apply label relative inline-flex min-h-[52px] items-center justify-center gap-3 overflow-hidden border border-current px-7 py-4 transition-colors duration-500;
+    isolation: isolate;
+  }
+  .btn-line::before {
     content: "";
-    @apply h-px w-8 bg-current opacity-60;
+    @apply absolute inset-0 -z-10 origin-bottom scale-y-0 bg-current transition-transform duration-500 ease-inout;
   }
-  .section-title {
-    @apply font-serif text-[2.5rem] font-light leading-[1.04] tracking-tight text-bark sm:text-5xl lg:text-6xl;
+  .btn-line:hover::before {
+    @apply scale-y-100;
   }
-  .nav-link {
-    @apply relative py-2 transition-colors hover:text-clay;
+  .btn-line.on-paper:hover {
+    @apply text-paper;
   }
-  .nav-link::after {
-    content: "";
-    @apply absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-clay transition-transform duration-300;
+  .btn-line.on-paper:hover::before {
+    @apply bg-ink;
   }
-  .nav-link:hover::after {
-    @apply scale-x-100;
+  .btn-line.on-ink:hover {
+    @apply text-ink;
   }
-  .card {
-    @apply rounded-3xl border border-linen bg-white/60 p-7 shadow-[0_20px_50px_-30px_rgba(59,47,39,0.35)] sm:p-8;
+  .btn-line.on-ink:hover::before {
+    @apply bg-paper;
   }
-  .brand-list > li:not(:last-child)::after {
-    content: "✦";
-    @apply ml-5 inline-block align-middle text-base not-italic text-ochre sm:ml-7 sm:text-lg;
+
+  .hairline {
+    @apply border-ink/15;
   }
+
+  .text-outline {
+    color: transparent;
+    -webkit-text-stroke: 1px #1e1915;
+  }
+
   .status-dot[data-state="open"] {
-    @apply bg-moss;
+    background: #9db08a;
   }
   .status-dot[data-state="closed"] {
-    @apply bg-clay;
+    background: #e08a5f;
   }
 }
 
-/* ---------- Zustände, die per JavaScript gesetzt werden ---------- */
+/* ---------- Bewegung: nur mit JavaScript (Klasse "js" auf <html>) ---------- */
 
-.status-dot[data-state="open"]::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 9999px;
-  background: inherit;
-  animation: ping-soft 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+/* Zeilen gleiten aus einer Maske nach oben */
+.line-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
+.line-mask > span {
+  display: block;
+}
+.js .line-mask > span {
+  transform: translateY(112%);
+  transition: transform 1.25s cubic-bezier(0.19, 1, 0.22, 1);
+  transition-delay: var(--d, 0ms);
+}
+.js .is-visible .line-mask > span,
+.js .line-mask.is-visible > span {
+  transform: none;
 }
 
-tr[data-today] th,
-tr[data-today] td {
-  color: #9a5230;
-  font-weight: 600;
+/* Bilder öffnen sich wie ein Vorhang */
+.js .img-reveal {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 1.4s cubic-bezier(0.77, 0, 0.18, 1);
+  transition-delay: var(--d, 0ms);
+}
+.js .img-reveal img {
+  transform: scale(1.22);
+  transition: transform 1.8s cubic-bezier(0.19, 1, 0.22, 1);
+  transition-delay: var(--d, 0ms);
+}
+.js .img-reveal.is-visible {
+  clip-path: inset(0 0 0 0);
+}
+.js .img-reveal.is-visible img {
+  transform: scale(1);
 }
 
-/* Sanftes Einblenden beim Scrollen – nur mit JavaScript (Klasse "js" auf <html>) */
+/* Sanftes Einblenden */
 .js [data-reveal] {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transform: translateY(22px);
+  transition: opacity 1s cubic-bezier(0.19, 1, 0.22, 1), transform 1s cubic-bezier(0.19, 1, 0.22, 1);
   transition-delay: var(--d, 0ms);
 }
 .js [data-reveal].is-visible {
@@ -139,85 +180,124 @@ tr[data-today] td {
   transform: none;
 }
 
-/* Papier-Körnung über Flächen */
-.grain {
-  position: relative;
-  isolation: isolate;
+/* Hero-Bild zoomt beim Laden langsam heran */
+.hero-img {
+  transform: scale(1.14);
+  transition: transform 2.8s cubic-bezier(0.19, 1, 0.22, 1);
 }
-.grain::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0.09;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.23 0 0 0 0 0.18 0 0 0 0 0.15 0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+.is-loaded .hero-img {
+  transform: scale(1);
 }
 
-/* Marken-Laufband: pausiert bei Hover */
+/* Kopfzeile verschwindet beim Runterscrollen, kommt beim Hochscrollen zurück */
+#site-header {
+  transition: transform 0.6s cubic-bezier(0.77, 0, 0.18, 1), background-color 0.4s;
+}
+#site-header[data-hidden="true"] {
+  transform: translateY(-100%);
+}
+
+/* Vollbild-Menü: "hidden" muss gegen die Layout-Klassen gewinnen */
+#mobile-menu:not([hidden]) {
+  display: flex;
+}
+
+/* Bilder im Fließtext */
+.inline-img {
+  display: inline-block;
+  vertical-align: -0.08em;
+  height: 0.78em;
+  width: 1.5em;
+  overflow: hidden;
+  margin: 0 0.12em;
+  transition: width 0.8s cubic-bezier(0.77, 0, 0.18, 1);
+}
+.inline-img img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.inline-img:hover {
+  width: 2.6em;
+}
+
+/* Waagerechte Galerie: ohne JS/auf kleinen Bildschirmen ein wischbares Band,
+   auf großen Bildschirmen beim Scrollen seitlich verschoben (Klasse is-pinned) */
+.hscroll-viewport {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 1.25rem;
+  scrollbar-width: none;
+}
+.hscroll-viewport::-webkit-scrollbar {
+  display: none;
+}
+.hscroll-track > * {
+  scroll-snap-align: start;
+}
+.hscroll.is-pinned .hscroll-viewport {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  scroll-snap-type: none;
+  display: flex;
+  align-items: center;
+}
+.hscroll.is-pinned .hscroll-track {
+  will-change: transform;
+}
+
+/* Bildvorschau, die dem Mauszeiger folgt (Sortiment) */
+#cursor-preview {
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+#cursor-preview.is-active {
+  opacity: 1;
+}
+#cursor-preview img {
+  opacity: 0;
+  transform: scale(1.08);
+  transition: opacity 0.45s ease, transform 0.9s cubic-bezier(0.19, 1, 0.22, 1);
+}
+#cursor-preview img.is-current {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Heute in den Öffnungszeiten */
+tr[data-today] th,
+tr[data-today] td {
+  color: #f2d3a0;
+}
+tr[data-today] th::after {
+  content: "Heute";
+  margin-left: 0.75rem;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid currentColor;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  vertical-align: 0.2em;
+}
+
 .marquee:hover .animate-marquee {
   animation-play-state: paused;
 }
 
-/* Kleine Illustrations-Animationen */
-.flame {
-  transform-origin: 62px 330px;
-  animation: flicker 3.2s ease-in-out infinite;
-}
-.sway {
-  transform-origin: 136px 250px;
-  animation: sway 9s ease-in-out infinite;
-}
-.swing {
-  transform-box: view-box;
-  animation: swing 5s ease-in-out infinite;
-}
-.pulse-ring {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: pulse-ring 2.4s ease-out infinite;
-}
-.draw path {
-  stroke-dasharray: 260;
-  stroke-dashoffset: 260;
-  animation: draw 1.4s 0.5s cubic-bezier(0.6, 0, 0.2, 1) forwards;
-}
-
-@keyframes ping-soft {
-  75%,
-  100% {
-    transform: scale(2.4);
-    opacity: 0;
-  }
-}
-@keyframes flicker {
-  0%, 100% { transform: scale(1, 1) rotate(0deg); }
-  30% { transform: scale(0.94, 1.06) rotate(-2deg); }
-  60% { transform: scale(1.04, 0.96) rotate(2deg); }
-}
-@keyframes sway {
-  0%, 100% { transform: rotate(-1.4deg); }
-  50% { transform: rotate(1.4deg); }
-}
-@keyframes swing {
-  0%, 100% { transform: rotate(-3deg); }
-  50% { transform: rotate(3deg); }
-}
-@keyframes pulse-ring {
-  0% { transform: scale(0.6); opacity: 0.6; }
-  100% { transform: scale(2.6); opacity: 0; }
-}
-@keyframes draw {
-  to { stroke-dashoffset: 0; }
-}
-
 @media (prefers-reduced-motion: reduce) {
+  .js .line-mask > span,
+  .js .img-reveal img,
+  .hero-img {
+    transform: none;
+  }
+  .js .img-reveal {
+    clip-path: none;
+  }
   .js [data-reveal] {
     opacity: 1;
     transform: none;
-  }
-  .draw path {
-    stroke-dashoffset: 0;
   }
 }
