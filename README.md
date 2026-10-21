@@ -7,17 +7,25 @@ Statische, schnelle Seite mit Tailwind CSS. Kein Framework, kein Tracking, keine
 ```
 rustikal-relaunch/
 ├── index.html              Hauptseite (alle Sektionen, SEO, Schema.org)
+├── .nojekyll               GitHub Pages: Dateien unverändert ausliefern
 ├── package.json            Build-Skripte
 ├── tailwind.config.js      Farben (Erdtöne), Schriften
 ├── src/input.css           Tailwind-Eingabe + kleine Komponenten
 └── assets/
-    ├── css/styles.css      wird vom Build erzeugt
+    ├── css/styles.css      vom Build erzeugt und mit eingecheckt
     ├── js/main.js          Menü, „Jetzt geöffnet?“, Karte per Klick
     └── img/
         ├── favicon.svg
         ├── galerie/        Ladenfotos (WebP/AVIF)
         └── marken/         optional: Markenlogos (nur mit Freigabe)
 ```
+
+## Live (GitHub Pages)
+
+Die Seite wird per GitHub Pages direkt aus dem Branch `main` veröffentlicht:
+https://vexsternbrink-hue.github.io/Rustical1/
+
+Jeder Push auf `main` geht nach etwa einer Minute live. Weil `assets/css/styles.css` mit eingecheckt ist, braucht der Server keinen Build-Schritt.
 
 ## Start
 
@@ -28,7 +36,7 @@ npm run dev        # Watch-Modus beim Entwickeln
 ```
 
 Die Seite danach über einen beliebigen statischen Server ausliefern, z. B. `npx serve .`.
-**Ohne `npm run build` ist die Seite unformatiert**, weil `styles.css` erst dabei entsteht.
+**Nach Änderungen an Klassen in `index.html` oder `assets/js/main.js` `npm run build` ausführen und die neue `styles.css` mit committen.** Sonst fehlen online die Styles für neue Klassen.
 
 ## Noch zu ergänzen (bewusst offen gelassen)
 
