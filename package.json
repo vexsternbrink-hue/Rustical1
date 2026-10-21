@@ -1,0 +1,13 @@
+{
+  "name": "rustikal-schoen-relaunch",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Relaunch der Website von Rustikal & Schön, Hamburg-Volksdorf",
+  "scripts": {
+    "dev": "tailwindcss -i ./src/input.css -o ./assets/css/styles.css --watch",
+    "build": "tailwindcss -i ./src/input.css -o ./assets/css/styles.css --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}

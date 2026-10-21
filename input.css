@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    @apply bg-cream font-sans text-bark antialiased;
+  }
+
+  /* Sichtbarer Fokus für Tastaturnutzer (WCAG 2.4.7) */
+  :focus-visible {
+    @apply outline outline-2 outline-offset-4 outline-clay;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full px-6 py-3 text-base font-medium transition-colors;
+  }
+  .btn-primary {
+    @apply bg-clay text-cream hover:bg-clayDark;
+  }
+  .btn-ghost {
+    @apply border border-bark/30 text-bark hover:border-bark hover:bg-sand;
+  }
+  .status-dot[data-state="open"] {
+    @apply bg-moss;
+  }
+  .eyebrow {
+    @apply text-sm font-medium uppercase tracking-[0.2em] text-clay;
+  }
+  .section-title {
+    @apply font-serif text-3xl leading-tight text-bark sm:text-4xl lg:text-5xl;
+  }
+}
