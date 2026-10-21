@@ -60,60 +60,131 @@
     });
   }
 
-  /* 3. „Jetzt geöffnet?“ – berechnet in der Zeitzone Europa/Berlin ------- */
+  /* 3. „Jetzt geöffnet?“ – Zeitzone Europa/Berlin, mit gesetzlichen
+        Feiertagen in Hamburg und Sonderöffnungszeiten ------------------- */
   var HOURS = {
     1: [10, 18], 2: [10, 18], 3: [10, 18], 4: [10, 18], 5: [10, 18], // Mo–Fr
     6: [10, 14], // Sa
   };
+  // Abweichende Zeiten für einzelne Tage: "JJJJ-MM-TT": [von, bis] oder null (geschlossen).
+  // Halbe Stunden als Dezimalzahl, z. B. 13.5 = 13:30 Uhr.
+  var SPECIAL = {
+    // "2026-12-24": [10, 13], // Heiligabend
+    // "2026-12-31": [10, 13], // Silvester
+  };
   var DAYS = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
+  var DAY_MS = 864e5;
 
+  function isoDate(t) {
+    return new Date(t).toISOString().slice(0, 10);
+  }
+
+  // Ostersonntag (Gaußsche Osterformel, Algorithmus von Meeus/Jones/Butcher)
+  function easterSunday(year) {
+    var a = year % 19, b = Math.floor(year / 100), c = year % 100;
+    var d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25);
+    var g = Math.floor((b - f + 1) / 3);
+    var h = (19 * a + b - d - g + 15) % 30;
+    var i = Math.floor(c / 4), k = c % 4;
+    var l = (32 + 2 * e + 2 * i - h - k) % 7;
+    var m = Math.floor((a + 11 * h + 22 * l) / 451);
+    var n = h + l - 7 * m + 114;
+    return Date.UTC(year, Math.floor(n / 31) - 1, (n % 31) + 1);
+  }
+
+  // Gesetzliche Feiertage in Hamburg als { "JJJJ-MM-TT": "Name" }
+  var holidayCache = {};
+  function hamburgHolidays(year) {
+    if (holidayCache[year]) return holidayCache[year];
+    var easter = easterSunday(year);
+    var list = {};
+    list[isoDate(Date.UTC(year, 0, 1))] = "Neujahr";
+    list[isoDate(easter - 2 * DAY_MS)] = "Karfreitag";
+    list[isoDate(easter + DAY_MS)] = "Ostermontag";
+    list[isoDate(Date.UTC(year, 4, 1))] = "Tag der Arbeit";
+    list[isoDate(easter + 39 * DAY_MS)] = "Christi Himmelfahrt";
+    list[isoDate(easter + 50 * DAY_MS)] = "Pfingstmontag";
+    list[isoDate(Date.UTC(year, 9, 3))] = "Tag der Deutschen Einheit";
+    list[isoDate(Date.UTC(year, 9, 31))] = "Reformationstag";
+    list[isoDate(Date.UTC(year, 11, 25))] = "1. Weihnachtstag";
+    list[isoDate(Date.UTC(year, 11, 26))] = "2. Weihnachtstag";
+    holidayCache[year] = list;
+    return list;
+  }
+
+  // Heutiges Datum (als UTC-Mitternacht), Wochentag und Minuten in Berlin
   function berlinNow() {
     var parts = new Intl.DateTimeFormat("en-GB", {
       timeZone: "Europe/Berlin",
-      weekday: "short",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
       hour: "2-digit",
       minute: "2-digit",
       hour12: false,
     }).formatToParts(new Date());
     var map = {};
     parts.forEach(function (p) { map[p.type] = p.value; });
-    var dayIdx = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 }[map.weekday];
-    return { day: dayIdx, minutes: parseInt(map.hour, 10) * 60 + parseInt(map.minute, 10) };
+    var date = Date.UTC(+map.year, +map.month - 1, +map.day);
+    return { date: date, day: new Date(date).getUTCDay(), minutes: (+map.hour % 24) * 60 + +map.minute };
+  }
+
+  // Öffnungszeiten eines Kalendertags: { hours: [von, bis] | null, holiday: Name | undefined }
+  function hoursFor(date) {
+    var key = isoDate(date);
+    var holiday = hamburgHolidays(new Date(date).getUTCFullYear())[key];
+    if (Object.prototype.hasOwnProperty.call(SPECIAL, key)) return { hours: SPECIAL[key], holiday: holiday };
+    if (holiday) return { hours: null, holiday: holiday };
+    return { hours: HOURS[new Date(date).getUTCDay()] || null };
+  }
+
+  function fmtHour(h) {
+    var min = Math.round((h % 1) * 60);
+    return Math.floor(h) + (min ? ":" + (min < 10 ? "0" : "") + min : "");
   }
 
   function statusText() {
     var now = berlinNow();
-    var today = HOURS[now.day];
-    if (today && now.minutes >= today[0] * 60 && now.minutes < today[1] * 60) {
-      var left = today[1] * 60 - now.minutes;
-      if (left <= 60) return { open: true, text: "Jetzt geöffnet · schließt in " + left + " Min." };
-      return { open: true, text: "Jetzt geöffnet · bis " + today[1] + " Uhr" };
+    var today = hoursFor(now.date);
+    var h = today.hours;
+    if (h && now.minutes >= h[0] * 60 && now.minutes < h[1] * 60) {
+      var left = Math.round(h[1] * 60 - now.minutes);
+      if (left <= 60) return { open: true, text: "Jetzt geöffnet · schließt in " + left + " Min.", short: "Schließt in " + left + " Min." };
+      return { open: true, text: "Jetzt geöffnet · bis " + fmtHour(h[1]) + " Uhr", short: "Geöffnet bis " + fmtHour(h[1]) + " Uhr" };
     }
-    // nächster Öffnungstag
-    for (var i = 0; i < 8; i++) {
-      var d = (now.day + i) % 7;
-      var h = HOURS[d];
-      if (!h) continue;
-      if (i === 0 && now.minutes >= h[0] * 60) continue; // heute schon vorbei
-      var label = i === 0 ? "heute" : i === 1 ? "morgen" : DAYS[d];
-      return { open: false, text: "Geschlossen · öffnet " + label + " um " + h[0] + " Uhr" };
+    var holidayClosed = today.holiday && !h;
+    var closed = holidayClosed ? "Feiertag (" + today.holiday + ")" : "Geschlossen";
+    var short = holidayClosed ? "Heute Feiertag" : "Geschlossen";
+    // nächster Öffnungstag – überspringt Sonntage, Feiertage und geschlossene Sondertage
+    for (var i = 0; i < 21; i++) {
+      var day = now.date + i * DAY_MS;
+      var next = hoursFor(day).hours;
+      if (!next) continue;
+      if (i === 0 && now.minutes >= next[0] * 60) continue; // heute schon vorbei
+      var label = i === 0 ? "heute" : i === 1 ? "morgen" : DAYS[new Date(day).getUTCDay()];
+      return { open: false, text: closed + " · öffnet " + label + " um " + fmtHour(next[0]) + " Uhr", short: short };
     }
-    return { open: false, text: "Geschlossen" };
+    return { open: false, text: closed, short: short };
   }
 
   function renderStatus() {
     var s = statusText();
     document.querySelectorAll("[data-open-status]").forEach(function (el) {
-      el.textContent = s.text;
+      // data-open-status="short" zeigt die Kurzform (Kopfzeile)
+      el.textContent = el.dataset.openStatus === "short" ? s.short : s.text;
       el.dataset.state = s.open ? "open" : "closed";
       if (el.previousElementSibling) el.previousElementSibling.dataset.state = el.dataset.state;
     });
   }
 
+  // Markiert die heutige Zeile der Tabelle – nicht an Feiertagen und Sondertagen,
+  // weil dann die reguläre Zeile nicht gilt.
   function markToday() {
-    var today = String(berlinNow().day);
+    var now = berlinNow();
+    var regular = !hoursFor(now.date).holiday && !Object.prototype.hasOwnProperty.call(SPECIAL, isoDate(now.date));
+    var today = String(now.day);
     document.querySelectorAll("tr[data-days]").forEach(function (row) {
-      if (row.dataset.days.split(" ").indexOf(today) !== -1) row.dataset.today = "";
+      if (regular && row.dataset.days.split(" ").indexOf(today) !== -1) row.dataset.today = "";
       else delete row.dataset.today;
     });
   }
