@@ -73,8 +73,20 @@
       if (el.previousElementSibling) el.previousElementSibling.dataset.state = el.dataset.state;
     });
   }
+  function markToday() {
+    var today = String(berlinNow().day);
+    document.querySelectorAll("tr[data-days]").forEach(function (row) {
+      if (row.dataset.days.split(" ").indexOf(today) !== -1) row.dataset.today = "";
+      else delete row.dataset.today;
+    });
+  }
+
   renderStatus();
-  setInterval(renderStatus, 60000);
+  markToday();
+  setInterval(function () {
+    renderStatus();
+    markToday();
+  }, 60000);
 
   /* 3. Google Maps erst nach Klick laden (DSGVO: Zwei-Klick-Lösung) ------ */
   var mapBtn = document.getElementById("map-load");
@@ -89,9 +101,38 @@
       iframe.title = "Karte: Rustikal & Schön, Claus-Ferck-Straße 3, 22359 Hamburg-Volksdorf";
       iframe.loading = "lazy";
       iframe.referrerPolicy = "no-referrer-when-downgrade";
-      iframe.className = "h-full w-full border-0";
+      iframe.className = "absolute inset-0 h-full w-full border-0";
       iframe.allowFullscreen = true;
       mapBox.replaceChildren(iframe);
     });
+  }
+
+  /* 4. Header bekommt beim Scrollen Rahmen und Schatten ------------------ */
+  var header = document.getElementById("site-header");
+  if (header) {
+    var onScroll = function () {
+      header.dataset.scrolled = String(window.scrollY > 8);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
+
+  /* 5. Inhalte beim Scrollen sanft einblenden ----------------------------- */
+  var revealEls = document.querySelectorAll("[data-reveal]");
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
+    );
+    revealEls.forEach(function (el) { io.observe(el); });
+  } else {
+    revealEls.forEach(function (el) { el.classList.add("is-visible"); });
   }
 })();

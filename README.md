@@ -13,6 +13,7 @@ rustikal-relaunch/
 ├── src/input.css           Tailwind-Eingabe + kleine Komponenten
 └── assets/
     ├── css/styles.css      vom Build erzeugt und mit eingecheckt
+    ├── fonts/              Fraunces + Inter, selbst gehostet (SIL OFL)
     ├── js/main.js          Menü, „Jetzt geöffnet?“, Karte per Klick
     └── img/
         ├── favicon.svg
@@ -48,7 +49,10 @@ Die Seite danach über einen beliebigen statischen Server ausliefern, z. B. `npx
 
 ## Performance, SEO, Barrierefreiheit
 
-- Systemschriften, ca. 1 KB JavaScript, Tailwind-CSS nur mit genutzten Klassen.
+- Schriften Fraunces (Überschriften) und Inter (Text) liegen lokal in `assets/fonts` – keine Anfragen an Google Fonts. Lizenz: SIL Open Font License (Dateien liegen bei).
+- Wenig JavaScript ohne Framework, Tailwind-CSS nur mit genutzten Klassen.
+- Hero, Sortiment-Kacheln, Gutschein und Karten-Vorschau sind Inline-SVG-Illustrationen. Sobald Ladenfotos da sind, können sie ersetzt werden (Hinweise als Kommentar im HTML).
+- Animationen (Laufband, Einblenden, Kerze) sind dezent und entfallen bei `prefers-reduced-motion`.
 - Bilder: `width`/`height` setzen, unterhalb des Hero `loading="lazy"`, Hero mit `fetchpriority="high"`.
 - `LocalBusiness` (Typ `GiftShop`) mit Öffnungszeiten als JSON-LD, Canonical, Open Graph.
 - Skip-Link, sichtbarer Fokus, Kontraste für WCAG AA berechnet, `prefers-reduced-motion`, Touch-Ziele ≥ 44 px.
