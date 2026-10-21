@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#FAF6F0">
+  <script>document.documentElement.classList.add("js");</script>
 
   <title>Geschenke &amp; Deko in Hamburg-Volksdorf | Rustikal &amp; Schön</title>
   <meta name="description" content="Rustikal &amp; Schön in Hamburg-Volksdorf: Geschenke, Deko und Wohnaccessoires von Dibbern, Marimekko, Wendt &amp; Kühn u. v. m. Claus-Ferck-Straße 3 · Mo–Fr 10–18 Uhr, Sa 10–14 Uhr.">
@@ -20,9 +21,11 @@
   <meta property="og:image" content="https://www.rustikal.de/assets/img/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
 
-  <!-- Favicon: Dateien selbst ergänzen -->
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 
+  <!-- Schriften liegen lokal – keine Anfragen an Google Fonts -->
+  <link rel="preload" href="assets/fonts/fraunces-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/css/styles.css">
 
   <!-- Strukturierte Daten: lokales Geschäft (Schema.org) -->
@@ -70,261 +73,592 @@
   <a href="#inhalt" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded focus:bg-bark focus:px-4 focus:py-3 focus:text-cream">Zum Inhalt springen</a>
 
   <!-- ============================ HEADER ============================ -->
-  <header class="sticky top-0 z-50 border-b border-linen/70 bg-cream/95 backdrop-blur">
-    <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
-      <a href="#top" class="font-serif text-xl uppercase tracking-wordmark text-bark" aria-label="Rustikal &amp; Schön – zum Seitenanfang">
-        Rustikal <span class="text-clay">&amp;</span> Schön
+  <header id="site-header" class="sticky top-0 z-50 border-b border-transparent bg-cream/75 backdrop-blur-md transition-[background-color,border-color,box-shadow] duration-300 data-[scrolled=true]:border-linen data-[scrolled=true]:bg-cream/90 data-[scrolled=true]:shadow-[0_10px_30px_-18px_rgba(59,47,39,0.35)]">
+    <div class="container-x flex h-[4.5rem] items-center justify-between">
+      <a href="#top" class="font-serif text-[1.45rem] tracking-tight text-bark" aria-label="Rustikal &amp; Schön – zum Seitenanfang">
+        Rustikal <span class="italic text-clay">&amp;</span> Schön
       </a>
 
       <nav aria-label="Hauptnavigation" class="hidden md:block">
-        <ul class="flex items-center gap-8 text-[0.95rem]">
-          <li><a class="py-2 hover:text-clay" href="#philosophie">Philosophie</a></li>
-          <li><a class="py-2 hover:text-clay" href="#marken">Marken</a></li>
-          <li><a class="py-2 hover:text-clay" href="#impressionen">Impressionen</a></li>
-          <li><a class="py-2 hover:text-clay" href="#gutschein">Gutscheine</a></li>
-          <li><a class="btn btn-primary !min-h-[44px] !py-2" href="#kontakt">Besuchen Sie uns</a></li>
+        <ul class="flex items-center gap-9 text-[0.95rem] font-medium">
+          <li><a class="nav-link" href="#philosophie">Philosophie</a></li>
+          <li><a class="nav-link" href="#sortiment">Sortiment</a></li>
+          <li><a class="nav-link" href="#marken">Marken</a></li>
+          <li><a class="nav-link" href="#gutschein">Gutscheine</a></li>
+          <li><a class="btn btn-primary !min-h-[44px] !px-5 !py-2" href="#kontakt">Besuchen Sie uns</a></li>
         </ul>
       </nav>
 
-      <button id="menu-toggle" type="button" class="-mr-2 inline-flex h-12 w-12 items-center justify-center rounded-full hover:bg-sand md:hidden"
+      <button id="menu-toggle" type="button" class="-mr-2 inline-flex h-12 w-12 items-center justify-center rounded-full transition hover:bg-sand md:hidden"
               aria-expanded="false" aria-controls="mobile-menu" aria-label="Menü">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
-          <path d="M4 7h16M4 12h16M4 17h16"/>
+          <path d="M4 8h16M4 16h16"/>
         </svg>
       </button>
     </div>
 
     <nav id="mobile-menu" hidden aria-label="Mobile Navigation" class="border-t border-linen bg-cream md:hidden">
-      <ul class="mx-auto max-w-6xl px-5 py-2 text-lg">
-        <li><a class="block border-b border-linen/60 py-4" href="#philosophie">Philosophie</a></li>
-        <li><a class="block border-b border-linen/60 py-4" href="#marken">Marken</a></li>
-        <li><a class="block border-b border-linen/60 py-4" href="#impressionen">Impressionen</a></li>
-        <li><a class="block border-b border-linen/60 py-4" href="#gutschein">Gutscheine</a></li>
-        <li><a class="block py-4" href="#kontakt">Kontakt &amp; Öffnungszeiten</a></li>
+      <ul class="container-x py-3 font-serif text-2xl">
+        <li><a class="flex items-center justify-between border-b border-linen/70 py-4" href="#philosophie">Philosophie <span class="text-clay" aria-hidden="true">→</span></a></li>
+        <li><a class="flex items-center justify-between border-b border-linen/70 py-4" href="#sortiment">Sortiment <span class="text-clay" aria-hidden="true">→</span></a></li>
+        <li><a class="flex items-center justify-between border-b border-linen/70 py-4" href="#marken">Marken <span class="text-clay" aria-hidden="true">→</span></a></li>
+        <li><a class="flex items-center justify-between border-b border-linen/70 py-4" href="#gutschein">Gutscheine <span class="text-clay" aria-hidden="true">→</span></a></li>
+        <li><a class="flex items-center justify-between py-4" href="#kontakt">Kontakt &amp; Öffnungszeiten <span class="text-clay" aria-hidden="true">→</span></a></li>
       </ul>
     </nav>
   </header>
 
   <main id="inhalt">
     <!-- ============================ HERO ============================ -->
-    <section id="top" class="relative isolate overflow-hidden bg-sand">
-      <!-- Hero-Bild: assets/img/hero.jpg (ca. 1920×1080, AVIF/WebP + JPG). Bis dahin: Farbverlauf. -->
-      <div class="absolute inset-0 -z-10 bg-gradient-to-br from-sand via-linen to-[#d9c3a5]" aria-hidden="true"></div>
-      <!--
-        Sobald das Foto vorliegt, den Block oben ersetzen durch:
-        <picture>
-          <source srcset="assets/img/hero.avif" type="image/avif">
-          <source srcset="assets/img/hero.webp" type="image/webp">
-          <img src="assets/img/hero.jpg" alt="Einladendes Schaufenster von Rustikal & Schön in Volksdorf"
-               width="1920" height="1080" fetchpriority="high"
-               class="absolute inset-0 -z-10 h-full w-full object-cover">
-        </picture>
-        und über dem Bild ein dunkles Overlay (bg-bark/40) setzen, falls der Text sonst nicht lesbar ist.
-      -->
+    <section id="top" class="grain overflow-hidden bg-cream">
+      <!-- Weiche Farbflächen im Hintergrund -->
+      <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+        <div class="absolute -left-40 -top-40 h-[34rem] w-[34rem] rounded-full bg-ochre/20 blur-3xl"></div>
+        <div class="absolute -right-32 top-24 h-[30rem] w-[30rem] rounded-full bg-clay/15 blur-3xl"></div>
+        <div class="absolute -bottom-48 left-1/3 h-[28rem] w-[28rem] rounded-full bg-ochre/10 blur-3xl"></div>
+      </div>
 
-      <div class="mx-auto grid max-w-6xl gap-10 px-5 py-16 sm:py-24 lg:grid-cols-12 lg:py-32">
-        <div class="lg:col-span-8">
-          <p class="eyebrow">Geschenke · Deko · Design in Volksdorf</p>
-          <h1 class="mt-4 font-serif text-[2.6rem] leading-[1.05] text-bark sm:text-6xl lg:text-7xl">
-            Alles Gute für Ihr&nbsp;Zuhause!
+      <div class="container-x grid items-center gap-14 pb-20 pt-10 sm:pt-14 lg:grid-cols-12 lg:gap-10 lg:pb-28 lg:pt-16">
+        <div class="lg:col-span-7">
+          <p class="inline-flex items-center gap-2.5 rounded-full border border-linen bg-white/70 px-4 py-2 text-sm font-medium shadow-sm backdrop-blur" role="status" data-reveal>
+            <span class="status-dot relative inline-flex h-2.5 w-2.5 rounded-full bg-stone" aria-hidden="true"></span>
+            <span data-open-status>Öffnungszeiten werden geladen …</span>
+          </p>
+
+          <h1 class="mt-8 text-balance font-serif text-[3.2rem] font-light leading-[0.98] tracking-tight text-bark sm:text-7xl lg:text-[5.6rem]" data-reveal style="--d:80ms">
+            Alles Gute für Ihr
+            <em class="relative inline-block whitespace-nowrap font-normal italic text-clay">
+              Zuhause!
+              <svg class="draw absolute -bottom-3 left-0 h-4 w-full text-ochre" viewBox="0 0 200 16" preserveAspectRatio="none" fill="none" aria-hidden="true">
+                <path d="M3 11 C 50 3, 120 2, 197 9" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+              </svg>
+            </em>
           </h1>
-          <p class="mt-6 max-w-xl text-lg leading-relaxed text-stone sm:text-xl">
+
+          <p class="mt-8 max-w-xl text-pretty text-lg leading-relaxed text-stone sm:text-xl" data-reveal style="--d:160ms">
             Handverlesene Wohnaccessoires, Geschenke und Naturprodukte – ausgesucht mit Sorgfalt, überreicht mit einem Lächeln. Mitten in Hamburg-Volksdorf.
           </p>
 
-          <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <div class="mt-10 flex flex-col gap-3 sm:flex-row" data-reveal style="--d:240ms">
             <a class="btn btn-primary" href="https://www.google.com/maps/dir/?api=1&amp;destination=Rustikal+%26+Sch%C3%B6n%2C+Claus-Ferck-Stra%C3%9Fe+3%2C+22359+Hamburg" target="_blank" rel="noopener">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
               Route zum Laden
               <span class="sr-only">(öffnet Google Maps in neuem Tab)</span>
             </a>
-            <a class="btn btn-ghost" href="#marken">Unsere Marken entdecken</a>
+            <a class="btn btn-ghost" href="#sortiment">Sortiment entdecken</a>
           </div>
 
-          <p class="mt-6 flex items-center gap-2 text-base" role="status">
-            <span class="status-dot inline-block h-2.5 w-2.5 rounded-full bg-stone" aria-hidden="true"></span>
-            <span data-open-status class="font-medium">Öffnungszeiten werden geladen …</span>
-          </p>
+          <ul class="mt-12 flex flex-wrap gap-x-7 gap-y-3 border-t border-linen pt-7 text-sm font-medium text-stone" data-reveal style="--d:320ms">
+            <li class="flex items-center gap-2"><span class="text-ochre" aria-hidden="true">✦</span> Inhabergeführt</li>
+            <li class="flex items-center gap-2"><span class="text-ochre" aria-hidden="true">✦</span> Europäische Fertigung</li>
+            <li class="flex items-center gap-2"><span class="text-ochre" aria-hidden="true">✦</span> Tausende Produkte</li>
+          </ul>
+        </div>
+
+        <!-- Illustration: Schaufenster-Bogen mit Stillleben. Später durch ein Ladenfoto ersetzbar
+             (<img> mit object-cover in denselben Bogen-Container setzen). -->
+        <div class="relative mx-auto w-full max-w-[26rem] lg:col-span-5 lg:max-w-none" data-reveal style="--d:200ms">
+          <div class="relative aspect-[4/5] overflow-hidden rounded-t-[999px] rounded-b-[2rem] shadow-[0_40px_80px_-40px_rgba(59,47,39,0.55)] ring-1 ring-bark/5">
+            <svg class="absolute inset-0 h-full w-full" viewBox="0 0 400 500" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+              <defs>
+                <linearGradient id="hg-bg" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#F3E9DA"/>
+                  <stop offset="1" stop-color="#E2CAA6"/>
+                </linearGradient>
+                <radialGradient id="hg-sun" cx="0.5" cy="0.5" r="0.5">
+                  <stop offset="0" stop-color="#F2C77E" stop-opacity=".75"/>
+                  <stop offset="1" stop-color="#F2C77E" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="hg-glow" cx="0.5" cy="0.5" r="0.5">
+                  <stop offset="0" stop-color="#FFD98A" stop-opacity=".7"/>
+                  <stop offset="1" stop-color="#FFD98A" stop-opacity="0"/>
+                </radialGradient>
+                <path id="hg-leaf" d="M0 0 C 6 -6.5, 16 -6.5, 22 0 C 16 6.5, 6 6.5, 0 0 Z"/>
+                <clipPath id="hg-vase"><path d="M118 420 C 88 404, 84 344, 108 304 C 120 284, 124 270, 122 250 L 150 250 C 148 270, 152 284, 164 304 C 188 344, 184 404, 154 420 Z"/></clipPath>
+                <clipPath id="hg-bowl"><path d="M213 388 H317 C314 408, 292 420, 265 420 C238 420, 216 408, 213 388 Z"/></clipPath>
+              </defs>
+
+              <rect width="400" height="500" fill="url(#hg-bg)"/>
+              <circle cx="275" cy="160" r="150" fill="url(#hg-sun)"/>
+              <!-- Fensterkreuz-Schatten -->
+              <g fill="#FAF6F0" fill-opacity=".35">
+                <rect x="196" y="0" width="8" height="330"/>
+                <rect x="0" y="210" width="400" height="7"/>
+              </g>
+
+              <!-- Tisch -->
+              <rect y="416" width="400" height="84" fill="#C9A57A"/>
+              <rect y="412" width="400" height="8" fill="#DDC29C"/>
+              <path d="M0 448 H400 M0 476 H400" stroke="#B48C60" stroke-opacity=".55" stroke-width="1.5"/>
+              <g fill="#3B2F27" fill-opacity=".16">
+                <ellipse cx="136" cy="419" rx="44" ry="5"/>
+                <ellipse cx="265" cy="419" rx="54" ry="5"/>
+                <ellipse cx="346" cy="419" rx="28" ry="4"/>
+                <ellipse cx="62" cy="419" rx="22" ry="4"/>
+              </g>
+
+              <!-- Zweige -->
+              <g class="sway">
+                <g fill="none" stroke="#5A4636" stroke-width="2.2" stroke-linecap="round">
+                  <path d="M134 250 C 128 190, 108 140, 72 96"/>
+                  <path d="M138 250 C 142 180, 160 130, 196 84"/>
+                  <path d="M136 250 C 136 200, 134 160, 128 118"/>
+                </g>
+                <g fill="#7E8A5E">
+                  <use href="#hg-leaf" transform="translate(127 205) rotate(-165)"/>
+                  <use href="#hg-leaf" transform="translate(114 166) rotate(-170)"/>
+                  <use href="#hg-leaf" transform="translate(96 130) rotate(-165)"/>
+                  <use href="#hg-leaf" transform="translate(144 199) rotate(-10)"/>
+                  <use href="#hg-leaf" transform="translate(155 158) rotate(-15)"/>
+                  <use href="#hg-leaf" transform="translate(172 119) rotate(-20)"/>
+                  <use href="#hg-leaf" transform="translate(134 180) rotate(-150)"/>
+                </g>
+                <g fill="#4F5F44">
+                  <use href="#hg-leaf" transform="translate(118 182) rotate(-35)"/>
+                  <use href="#hg-leaf" transform="translate(104 148) rotate(-45)"/>
+                  <use href="#hg-leaf" transform="translate(86 116) rotate(-70)"/>
+                  <use href="#hg-leaf" transform="translate(72 96) rotate(-125)"/>
+                  <use href="#hg-leaf" transform="translate(150 178) rotate(-120)"/>
+                  <use href="#hg-leaf" transform="translate(163 140) rotate(-110)"/>
+                  <use href="#hg-leaf" transform="translate(182 104) rotate(-100)"/>
+                  <use href="#hg-leaf" transform="translate(196 84) rotate(-55)"/>
+                  <use href="#hg-leaf" transform="translate(132 150) rotate(-30)"/>
+                  <use href="#hg-leaf" transform="translate(128 118) rotate(-95)"/>
+                </g>
+              </g>
+
+              <!-- Vase -->
+              <path d="M118 420 C 88 404, 84 344, 108 304 C 120 284, 124 270, 122 250 L 150 250 C 148 270, 152 284, 164 304 C 188 344, 184 404, 154 420 Z" fill="#9A5230"/>
+              <g clip-path="url(#hg-vase)" fill="#FAF6F0">
+                <rect x="80" y="338" width="120" height="7" fill-opacity=".9"/>
+                <rect x="80" y="351" width="120" height="2.5" fill-opacity=".9"/>
+                <rect x="80" y="392" width="120" height="2.5" fill-opacity=".6"/>
+              </g>
+              <path d="M104 326 C 99 348, 101 378, 112 400" stroke="#FAF6F0" stroke-opacity=".3" stroke-width="5" fill="none" stroke-linecap="round"/>
+              <rect x="117" y="243" width="38" height="9" rx="4.5" fill="#7C3F22"/>
+
+              <!-- Schalen -->
+              <path d="M213 388 H317 C314 408, 292 420, 265 420 C238 420, 216 408, 213 388 Z" fill="#FAF6F0"/>
+              <g clip-path="url(#hg-bowl)">
+                <rect x="200" y="395" width="130" height="4" fill="#9A5230"/>
+                <rect x="200" y="403" width="130" height="1.5" fill="#9A5230"/>
+              </g>
+              <path d="M224 364 H306 C303 380, 286 389, 265 389 C244 389, 227 380, 224 364 Z" fill="#4F5F44"/>
+              <g fill="#FAF6F0" fill-opacity=".75">
+                <circle cx="240" cy="372" r="2"/><circle cx="252" cy="378" r="2"/><circle cx="265" cy="380" r="2"/><circle cx="278" cy="378" r="2"/><circle cx="290" cy="372" r="2"/>
+              </g>
+              <path d="M236 342 H294 C292 354, 280 364, 265 364 C250 364, 238 354, 236 342 Z" fill="#C8964A"/>
+              <ellipse cx="265" cy="342" rx="29" ry="3.5" fill="#A87A35"/>
+
+              <!-- Krug -->
+              <path d="M360 348 C 382 348, 386 382, 364 394" stroke="#6F8185" stroke-width="6" fill="none" stroke-linecap="round"/>
+              <path d="M326 420 C 318 398, 320 372, 332 356 C 336 350, 335 342, 331 336 L 359 336 C 355 342, 354 350, 358 356 C 370 372, 372 398, 364 420 Z" fill="#7A8B8F"/>
+              <path d="M331 336 L 321 329 L 337 333 Z" fill="#7A8B8F"/>
+              <rect x="329" y="331" width="32" height="6" rx="3" fill="#66767A"/>
+              <path d="M333 372 C 331 386, 332 400, 336 410" stroke="#FAF6F0" stroke-opacity=".3" stroke-width="4" fill="none" stroke-linecap="round"/>
+
+              <!-- Kerze -->
+              <circle cx="62" cy="318" r="46" fill="url(#hg-glow)"/>
+              <path d="M44 420 H80 L76 410 H48 Z" fill="#B8873E"/>
+              <rect x="54" y="403" width="16" height="9" rx="2" fill="#C8964A"/>
+              <rect x="54" y="336" width="16" height="70" rx="3" fill="#FAF6F0"/>
+              <path d="M54 341 h6 v9 a3 3 0 0 1 -6 0 Z" fill="#EFE3D0"/>
+              <line x1="62" y1="336" x2="62" y2="329" stroke="#3B2F27" stroke-width="1.5"/>
+              <g class="flame">
+                <path d="M62 302 C 70 314, 70 326, 62 330 C 54 326, 54 314, 62 302 Z" fill="#E7A64A"/>
+                <path d="M62 313 C 66 319, 66 325, 62 327 C 58 325, 58 319, 62 313 Z" fill="#FBE3A8"/>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Drehendes Siegel -->
+          <div class="absolute -right-3 -top-5 h-28 w-28 sm:-right-6 sm:h-32 sm:w-32" aria-hidden="true">
+            <svg viewBox="0 0 120 120" class="h-full w-full animate-spin-slow">
+              <defs><path id="seal-circle" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs>
+              <circle cx="60" cy="60" r="59" fill="#3B2F27"/>
+              <text class="font-sans" font-size="9.5" font-weight="600" letter-spacing="1" fill="#FAF6F0">
+                <textPath href="#seal-circle" textLength="280" lengthAdjust="spacing">GESCHENKE · DEKO · DESIGN · VOLKSDORF ·</textPath>
+              </text>
+            </svg>
+            <svg viewBox="0 0 24 24" class="absolute left-1/2 top-1/2 h-7 w-7 -translate-x-1/2 -translate-y-1/2 text-ochre" fill="currentColor"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z"/></svg>
+          </div>
+
+          <!-- Adress-Karte -->
+          <div class="absolute -bottom-6 -left-3 flex animate-float items-center gap-3 rounded-2xl border border-white/60 bg-cream/90 p-3.5 pr-5 shadow-xl shadow-bark/10 backdrop-blur sm:-left-8">
+            <span class="flex h-11 w-11 items-center justify-center rounded-full bg-clay text-cream" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            </span>
+            <span class="text-sm leading-snug">
+              <span class="block font-semibold">Claus-Ferck-Straße 3</span>
+              <span class="block text-stone">22359 Hamburg-Volksdorf</span>
+            </span>
+          </div>
         </div>
       </div>
     </section>
 
+    <!-- ========================= LAUFBAND ========================= -->
+    <div class="marquee overflow-hidden bg-bark py-5 text-cream" aria-hidden="true">
+      <div class="flex w-max animate-marquee">
+        <ul class="flex shrink-0 items-center gap-10 pr-10 font-serif text-2xl font-light italic sm:text-3xl">
+          <li>Geschenke</li><li class="text-ochre">✦</li><li>Wohnaccessoires</li><li class="text-ochre">✦</li><li>Porzellan &amp; Glas</li><li class="text-ochre">✦</li><li>Textilien</li><li class="text-ochre">✦</li><li>Küche</li><li class="text-ochre">✦</li><li>Naturprodukte</li><li class="text-ochre">✦</li><li>Saisonale Deko</li><li class="text-ochre">✦</li><li>Holzkunst</li><li class="text-ochre">✦</li>
+        </ul>
+        <ul class="flex shrink-0 items-center gap-10 pr-10 font-serif text-2xl font-light italic sm:text-3xl">
+          <li>Geschenke</li><li class="text-ochre">✦</li><li>Wohnaccessoires</li><li class="text-ochre">✦</li><li>Porzellan &amp; Glas</li><li class="text-ochre">✦</li><li>Textilien</li><li class="text-ochre">✦</li><li>Küche</li><li class="text-ochre">✦</li><li>Naturprodukte</li><li class="text-ochre">✦</li><li>Saisonale Deko</li><li class="text-ochre">✦</li><li>Holzkunst</li><li class="text-ochre">✦</li>
+        </ul>
+      </div>
+    </div>
+
     <!-- ========================= PHILOSOPHIE ========================= -->
-    <section id="philosophie" class="bg-cream py-20 sm:py-28" aria-labelledby="philosophie-titel">
-      <div class="mx-auto grid max-w-6xl gap-12 px-5 lg:grid-cols-12 lg:gap-16">
+    <section id="philosophie" class="bg-cream py-24 sm:py-32" aria-labelledby="philosophie-titel">
+      <div class="container-x grid gap-14 lg:grid-cols-12 lg:gap-16">
         <div class="lg:col-span-5">
-          <p class="eyebrow">Unsere Philosophie</p>
-          <h2 id="philosophie-titel" class="section-title mt-3">Echte Handwerkskunst. Ein langes Leben.</h2>
+          <div class="lg:sticky lg:top-28" data-reveal>
+            <p class="eyebrow">Unsere Philosophie</p>
+            <h2 id="philosophie-titel" class="section-title mt-5">Echte Handwerkskunst. <em class="italic text-clay">Ein langes Leben.</em></h2>
+            <p class="mt-7 text-pretty text-lg leading-relaxed text-stone">
+              Vom ersten Tag an legen wir Wert auf Handwerkskunst, die aus hochwertigen Materialien formschöne und zugleich funktionale Dinge macht – für den Alltag und für die besonderen Momente.
+            </p>
+          </div>
         </div>
 
-        <div class="lg:col-span-7">
-          <p class="text-lg leading-relaxed text-stone sm:text-xl">
-            Vom ersten Tag an legen wir Wert auf Handwerkskunst, die aus hochwertigen Materialien formschöne und zugleich funktionale Dinge macht – für den Alltag und für die besonderen Momente.
-          </p>
+        <ol class="grid gap-5 lg:col-span-7">
+          <li class="card group flex gap-6 transition duration-500 hover:-translate-y-1 hover:bg-white" data-reveal>
+            <span class="font-serif text-4xl font-light italic text-clay/70">01</span>
+            <div>
+              <div class="flex items-center gap-3">
+                <span class="flex h-11 w-11 items-center justify-center rounded-full bg-olive/15 text-moss" aria-hidden="true">
+                  <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c4 3 6 6 6 9a6 6 0 0 1-12 0c0-3 2-6 6-9z"/><path d="M12 21v-9"/></svg>
+                </span>
+                <h3 class="font-serif text-2xl">Naturprodukte</h3>
+              </div>
+              <p class="mt-3 leading-relaxed text-stone">Wo immer wir die Wahl haben, greifen wir zu natürlichen Materialien.</p>
+            </div>
+          </li>
+          <li class="card group flex gap-6 transition duration-500 hover:-translate-y-1 hover:bg-white" data-reveal style="--d:100ms">
+            <span class="font-serif text-4xl font-light italic text-clay/70">02</span>
+            <div>
+              <div class="flex items-center gap-3">
+                <span class="flex h-11 w-11 items-center justify-center rounded-full bg-ochre/20 text-clayDark" aria-hidden="true">
+                  <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg>
+                </span>
+                <h3 class="font-serif text-2xl">Europäische Fertigung</h3>
+              </div>
+              <p class="mt-3 leading-relaxed text-stone">Sozialverträglich produziert, mit Verantwortung für Ressourcen.</p>
+            </div>
+          </li>
+          <li class="card group flex gap-6 transition duration-500 hover:-translate-y-1 hover:bg-white" data-reveal style="--d:200ms">
+            <span class="font-serif text-4xl font-light italic text-clay/70">03</span>
+            <div>
+              <div class="flex items-center gap-3">
+                <span class="flex h-11 w-11 items-center justify-center rounded-full bg-clay/10 text-clay" aria-hidden="true">
+                  <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+                </span>
+                <h3 class="font-serif text-2xl">Mit Sorgfalt gewählt</h3>
+              </div>
+              <p class="mt-3 leading-relaxed text-stone">Tausende Produkte – verbunden durch den Sinn für das Schöne.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
 
-          <ul class="mt-10 grid gap-8 sm:grid-cols-3">
-            <li>
-              <svg class="h-9 w-9 text-clay" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c4 3 6 6 6 9a6 6 0 0 1-12 0c0-3 2-6 6-9z"/><path d="M12 21v-9"/></svg>
-              <h3 class="mt-4 font-serif text-xl">Naturprodukte</h3>
-              <p class="mt-2 leading-relaxed text-stone">Wo immer wir die Wahl haben, greifen wir zu natürlichen Materialien.</p>
-            </li>
-            <li>
-              <svg class="h-9 w-9 text-clay" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg>
-              <h3 class="mt-4 font-serif text-xl">Europäische Fertigung</h3>
-              <p class="mt-2 leading-relaxed text-stone">Sozialverträglich produziert, mit Verantwortung für Ressourcen.</p>
-            </li>
-            <li>
-              <svg class="h-9 w-9 text-clay" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
-              <h3 class="mt-4 font-serif text-xl">Mit Sorgfalt gewählt</h3>
-              <p class="mt-2 leading-relaxed text-stone">Tausende Produkte – verbunden durch den Sinn für das Schöne.</p>
-            </li>
-          </ul>
-
-          <p class="mt-10 border-l-2 border-clay pl-5 font-serif text-xl italic leading-relaxed text-bark">
-            Die Qualität einer Handwaschbürste ist uns so wichtig wie die Reinheit einer Wolldecke.
-          </p>
+      <figure class="container-x mt-24 sm:mt-32" data-reveal>
+        <div class="mx-auto max-w-4xl text-center">
+          <svg class="mx-auto h-10 w-10 text-ochre" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z"/></svg>
+          <blockquote class="mt-8 text-balance font-serif text-3xl font-light italic leading-snug text-bark sm:text-5xl sm:leading-[1.15]">
+            „Die Qualität einer Handwaschbürste ist uns so wichtig wie die Reinheit einer Wolldecke.“
+          </blockquote>
+          <figcaption class="mt-8 text-sm font-semibold uppercase tracking-[0.22em] text-stone">Rustikal &amp; Schön, Volksdorf</figcaption>
         </div>
+      </figure>
+    </section>
+
+    <!-- ========================== SORTIMENT ========================== -->
+    <!-- Die Kacheln zeigen Illustrationen. Sobald Ladenfotos vorliegen, kann pro Kachel das <svg>
+         durch ein <img … loading="lazy" class="absolute inset-0 h-full w-full object-cover"> ersetzt werden
+         (dann ein dunkles Overlay für die Lesbarkeit des Textes ergänzen). -->
+    <section id="sortiment" class="grain bg-sand py-24 sm:py-32" aria-labelledby="sortiment-titel">
+      <div class="container-x">
+        <div class="flex flex-col justify-between gap-6 sm:flex-row sm:items-end" data-reveal>
+          <div class="max-w-2xl">
+            <p class="eyebrow">Sortiment</p>
+            <h2 id="sortiment-titel" class="section-title mt-5">Was Sie bei uns <em class="italic text-clay">entdecken</em></h2>
+          </div>
+          <a class="group inline-flex items-center gap-2 font-medium text-clay underline-offset-4 hover:text-clayDark hover:underline" href="https://www.instagram.com/rustikalundschoen_hamburg/" target="_blank" rel="noopener">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+            Aktuelle Eindrücke auf Instagram<span class="sr-only"> (öffnet in neuem Tab)</span>
+            <span class="transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
+          </a>
+        </div>
+
+        <ul class="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2">
+          <!-- Geschirr & Glas -->
+          <li class="group relative min-h-[22rem] overflow-hidden rounded-[2rem] bg-clay p-8 text-cream sm:col-span-2 lg:row-span-2 lg:min-h-[36rem] lg:p-10" data-reveal>
+            <h3 class="font-serif text-3xl sm:text-4xl">Geschirr &amp; Glas</h3>
+            <p class="mt-3 max-w-xs leading-relaxed text-cream/85">Porzellan, Gläser und Keramik für den gedeckten Tisch – vom Alltagsbecher bis zum Festtagsgeschirr.</p>
+            <svg class="absolute bottom-0 right-0 h-[68%] max-h-[26rem] origin-bottom-right transition-transform duration-700 group-hover:-rotate-2 group-hover:scale-105" viewBox="0 0 232 220" aria-hidden="true">
+              <circle cx="112" cy="128" r="74" fill="#FAF6F0"/>
+              <circle cx="112" cy="128" r="56" fill="none" stroke="#E4D6C2" stroke-width="2"/>
+              <circle cx="112" cy="128" r="38" fill="#EFE6D8"/>
+              <circle cx="112" cy="128" r="64" fill="none" stroke="#C8964A" stroke-width="1.5" stroke-dasharray="2 6" stroke-linecap="round"/>
+              <path d="M168 30 H206 C206 62, 197 76, 187 78 C 177 76, 168 62, 168 30 Z" fill="#FAF6F0" fill-opacity=".3" stroke="#FAF6F0" stroke-width="2.5"/>
+              <path d="M170 48 H204" stroke="#FAF6F0" stroke-opacity=".6" stroke-width="1.5"/>
+              <line x1="187" y1="78" x2="187" y2="128" stroke="#FAF6F0" stroke-width="3"/>
+              <path d="M174 130 H200" stroke="#FAF6F0" stroke-width="4" stroke-linecap="round"/>
+              <path d="M18 160 H72 V 178 C72 194, 61 202, 45 202 C29 202, 18 194, 18 178 Z" fill="#FAF6F0"/>
+              <path d="M72 166 C 88 166, 88 188, 72 188" stroke="#FAF6F0" stroke-width="5" fill="none"/>
+              <path d="M18 168 H72" stroke="#C8964A" stroke-width="3"/>
+            </svg>
+          </li>
+
+          <!-- Textilien -->
+          <li class="group relative min-h-[17rem] overflow-hidden rounded-[2rem] bg-moss p-8 text-cream" data-reveal style="--d:100ms">
+            <h3 class="font-serif text-2xl">Textilien</h3>
+            <p class="mt-2 max-w-[13rem] text-sm leading-relaxed text-cream/85">Decken, Tischwäsche und Geschirrtücher aus Leinen, Wolle und Baumwolle.</p>
+            <svg class="absolute -bottom-4 -right-4 h-44 w-44 transition-transform duration-700 group-hover:-translate-y-1 group-hover:scale-105" viewBox="0 0 200 200" aria-hidden="true">
+              <rect x="26" y="146" width="150" height="30" rx="7" fill="#E4D6C2"/>
+              <path d="M26 156 H176 M26 164 H176" stroke="#9A5230" stroke-width="2.5"/>
+              <path d="M176 150 h8 M176 156 h8 M176 162 h8 M176 168 h8" stroke="#E4D6C2" stroke-width="2" stroke-linecap="round"/>
+              <rect x="36" y="116" width="132" height="30" rx="7" fill="#C8964A"/>
+              <path d="M36 131 H168" stroke="#FAF6F0" stroke-width="2" stroke-dasharray="6 5"/>
+              <rect x="46" y="86" width="114" height="30" rx="7" fill="#FAF6F0"/>
+              <path d="M66 86 V116 M86 86 V116 M106 86 V116 M126 86 V116 M146 86 V116 M46 101 H160" stroke="#7E8A5E" stroke-width="2"/>
+            </svg>
+          </li>
+
+          <!-- Küche & Haushalt -->
+          <li class="group relative min-h-[17rem] overflow-hidden rounded-[2rem] border border-linen bg-cream p-8 text-bark" data-reveal style="--d:200ms">
+            <h3 class="font-serif text-2xl">Küche &amp; Haushalt</h3>
+            <p class="mt-2 max-w-[13rem] text-sm leading-relaxed text-stone">Messer, Bürsten und Küchenhelfer, die lange halten.</p>
+            <svg class="absolute -bottom-4 -right-4 h-44 w-44 transition-transform duration-700 group-hover:rotate-3 group-hover:scale-105" viewBox="0 0 200 200" aria-hidden="true">
+              <g transform="rotate(-32 110 110)">
+                <ellipse cx="110" cy="52" rx="19" ry="27" fill="#C9A57A"/>
+                <ellipse cx="110" cy="54" rx="12" ry="19" fill="#B48C60"/>
+                <rect x="106" y="76" width="8" height="112" rx="4" fill="#C9A57A"/>
+              </g>
+              <g transform="rotate(18 120 140)">
+                <rect x="60" y="120" width="112" height="26" rx="9" fill="#9A5230"/>
+                <circle cx="160" cy="133" r="3.5" fill="#7C3F22"/>
+                <path d="M68 146 V164 M75 146 V166 M82 146 V166 M89 146 V166 M96 146 V166 M103 146 V166 M110 146 V166 M117 146 V166 M124 146 V166 M131 146 V166 M138 146 V166 M145 146 V164" stroke="#3B2F27" stroke-width="2.2" stroke-linecap="round"/>
+              </g>
+            </svg>
+          </li>
+
+          <!-- Saisonale Deko -->
+          <li class="group relative min-h-[17rem] overflow-hidden rounded-[2rem] bg-bark p-8 text-cream" data-reveal style="--d:100ms">
+            <h3 class="font-serif text-2xl">Saisonale Deko</h3>
+            <p class="mt-2 max-w-[13rem] text-sm leading-relaxed text-cream/80">Ostern, Sommer, Advent – unsere Deko wechselt mit den Jahreszeiten.</p>
+            <svg class="absolute -bottom-2 -right-2 h-44 w-44" viewBox="0 0 200 200" aria-hidden="true">
+              <g class="swing" style="transform-origin:60px 40px">
+                <line x1="60" y1="40" x2="60" y2="112" stroke="#E4D6C2" stroke-width="1.5"/>
+                <rect x="54" y="110" width="12" height="7" rx="1.5" fill="#C8964A"/>
+                <circle cx="60" cy="134" r="19" fill="#9A5230"/>
+                <path d="M46 128 C 54 124, 66 124, 74 128" stroke="#FAF6F0" stroke-opacity=".5" stroke-width="2" fill="none"/>
+              </g>
+              <g class="swing" style="transform-origin:130px 20px; animation-delay:-1.6s">
+                <line x1="130" y1="20" x2="130" y2="66" stroke="#E4D6C2" stroke-width="1.5"/>
+                <path d="M130 64 L138.8 87.9 L164.2 88.9 L144.3 104.6 L151.2 129.1 L130 115 L108.8 129.1 L115.7 104.6 L95.8 88.9 L121.2 87.9 Z" fill="#C8964A"/>
+              </g>
+              <g class="swing" style="transform-origin:174px 60px; animation-delay:-3s">
+                <line x1="174" y1="60" x2="174" y2="140" stroke="#E4D6C2" stroke-width="1.5"/>
+                <rect x="169" y="138" width="10" height="6" rx="1.5" fill="#C8964A"/>
+                <circle cx="174" cy="157" r="14" fill="#7E8A5E"/>
+              </g>
+              <g fill="#FAF6F0">
+                <path d="M30 70 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2z"/>
+                <path d="M100 160 l1.5 4.5 4.5 1.5 -4.5 1.5 -1.5 4.5 -1.5 -4.5 -4.5 -1.5 4.5 -1.5z"/>
+              </g>
+            </svg>
+          </li>
+
+          <!-- Holzkunst -->
+          <li class="group relative min-h-[17rem] overflow-hidden rounded-[2rem] bg-linen p-8 text-bark" data-reveal style="--d:200ms">
+            <h3 class="font-serif text-2xl">Holzkunst</h3>
+            <p class="mt-2 max-w-[13rem] text-sm leading-relaxed text-bark/80">Handgefertigte Holzfiguren, etwa von Wendt &amp; Kühn aus dem Erzgebirge.</p>
+            <svg class="absolute bottom-1 right-1 h-48 w-48 transition-transform duration-700 group-hover:-translate-y-1" viewBox="0 0 200 204" aria-hidden="true">
+              <path d="M100 124 C 70 104, 56 122, 64 154 C 80 148, 92 138, 100 130 Z" fill="#4F5F44"/>
+              <path d="M100 124 C 130 104, 144 122, 136 154 C 120 148, 108 138, 100 130 Z" fill="#4F5F44"/>
+              <g fill="#FAF6F0"><circle cx="76" cy="126" r="2"/><circle cx="72" cy="138" r="2"/><circle cx="84" cy="134" r="2"/><circle cx="124" cy="126" r="2"/><circle cx="128" cy="138" r="2"/><circle cx="116" cy="134" r="2"/></g>
+              <path d="M84 192 C 86 162, 92 132, 100 120 C 108 132, 114 162, 116 192 Z" fill="#9A5230"/>
+              <path d="M90 170 H110" stroke="#C8964A" stroke-width="3"/>
+              <rect x="78" y="190" width="44" height="8" rx="3" fill="#B48C60"/>
+              <circle cx="100" cy="106" r="14" fill="#EAD3B4"/>
+              <path d="M86 104 C 86 90, 114 90, 114 104 C 110 98, 90 98, 86 104 Z" fill="#C8964A"/>
+              <path d="M100 84 l2.2 5 5.3 .6 -4 3.6 1.1 5.3 -4.6 -2.7 -4.6 2.7 1.1 -5.3 -4 -3.6 5.3 -.6z" fill="#C8964A"/>
+              <rect x="161" y="182" width="8" height="12" fill="#7C3F22"/>
+              <path d="M146 184 L165 128 L184 184 Z" fill="#7E8A5E"/>
+              <path d="M151 162 L165 118 L179 162 Z" fill="#4F5F44"/>
+              <path d="M156 140 L165 108 L174 140 Z" fill="#7E8A5E"/>
+            </svg>
+          </li>
+        </ul>
       </div>
     </section>
 
     <!-- ============================ MARKEN ============================ -->
-    <section id="marken" class="bg-sand py-20 sm:py-28" aria-labelledby="marken-titel">
-      <div class="mx-auto max-w-6xl px-5">
-        <div class="max-w-2xl">
-          <p class="eyebrow">Marken &amp; Sortiment</p>
-          <h2 id="marken-titel" class="section-title mt-3">Alles aus gutem Haus</h2>
-          <p class="mt-5 text-lg leading-relaxed text-stone">
+    <section id="marken" class="bg-cream py-24 sm:py-32" aria-labelledby="marken-titel">
+      <div class="container-x">
+        <div class="grid gap-8 lg:grid-cols-12" data-reveal>
+          <div class="lg:col-span-5">
+            <p class="eyebrow">Marken</p>
+            <h2 id="marken-titel" class="section-title mt-5">Alles aus <em class="italic text-clay">gutem Haus</em></h2>
+          </div>
+          <p class="text-pretty text-lg leading-relaxed text-stone lg:col-span-6 lg:col-start-7 lg:self-end">
             Von weltweit renommierten Namen bis zu Herstellern, die Sie vielleicht noch gar nicht kennen – wir sind immer für eine angenehme Überraschung gut.
           </p>
         </div>
 
-        <!--
-          Markenwand: bewusst als Schriftzug-Kacheln, nicht als Logos – Markenlogos sind
-          urheber-/markenrechtlich geschützt. Mit Freigabe der Hersteller können die
-          Logos als <img> (SVG) in die Kacheln eingesetzt werden.
-        -->
-        <ul class="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-linen bg-linen sm:grid-cols-3 lg:grid-cols-4">
-          <li class="flex min-h-[7.5rem] items-center justify-center bg-cream px-4 text-center font-serif text-2xl tracking-wide transition-colors hover:bg-white">Dibbern</li>
-          <li class="flex min-h-[7.5rem] items-center justify-center bg-cream px-4 text-center font-serif text-2xl lowercase tracking-wide transition-colors hover:bg-white">marimekko</li>
-          <li class="flex min-h-[7.5rem] items-center justify-center bg-cream px-4 text-center font-serif text-2xl tracking-wide transition-colors hover:bg-white">Ekelund</li>
-          <li class="flex min-h-[7.5rem] items-center justify-center bg-cream px-4 text-center font-serif text-2xl tracking-wide transition-colors hover:bg-white">Burgvogel</li>
-          <li class="flex min-h-[7.5rem] items-center justify-center bg-cream px-4 text-center font-serif text-2xl tracking-wide transition-colors hover:bg-white">Ackermann</li>
-          <li class="flex min-h-[7.5rem] items-center justify-center bg-cream px-4 text-center font-serif text-2xl tracking-wide transition-colors hover:bg-white">Bengt &amp; Lotta</li>
-          <li class="flex min-h-[7.5rem] items-center justify-center bg-cream px-4 text-center font-serif text-2xl lowercase tracking-wide transition-colors hover:bg-white">cilio</li>
-          <li class="flex min-h-[7.5rem] items-center justify-center bg-cream px-4 text-center font-serif text-2xl tracking-wide transition-colors hover:bg-white">Wendt &amp; Kühn</li>
+        <!-- Markennamen bewusst als Schrift, nicht als Logos (Marken-/Urheberrecht). -->
+        <ul class="brand-list mt-16 flex flex-wrap items-center gap-x-5 gap-y-5 border-y border-linen py-12 font-serif text-4xl font-light leading-none sm:gap-x-7 sm:text-5xl lg:text-6xl" data-reveal>
+          <li class="transition-colors duration-300 hover:italic hover:text-clay">Dibbern</li>
+          <li class="lowercase transition-colors duration-300 hover:italic hover:text-clay">marimekko</li>
+          <li class="transition-colors duration-300 hover:italic hover:text-clay">Ekelund</li>
+          <li class="transition-colors duration-300 hover:italic hover:text-clay">Burgvogel</li>
+          <li class="transition-colors duration-300 hover:italic hover:text-clay">Ackermann</li>
+          <li class="transition-colors duration-300 hover:italic hover:text-clay">Bengt &amp; Lotta</li>
+          <li class="lowercase transition-colors duration-300 hover:italic hover:text-clay">cilio</li>
+          <li class="transition-colors duration-300 hover:italic hover:text-clay">Wendt &amp; Kühn</li>
         </ul>
 
-        <p class="mt-6 text-stone">… und viele mehr. Dies ist nur eine Auswahl unseres großen Sortiments – dazu kommen saisonale Hersteller und Einzelstücke.</p>
-
-        <div class="mt-8">
-          <a class="btn btn-ghost" href="https://www.rustikal.de/produkte/">Zu unseren Produkten</a>
+        <div class="mt-10 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center" data-reveal>
+          <p class="max-w-xl text-stone">… und viele mehr. Dies ist nur eine Auswahl unseres großen Sortiments – dazu kommen saisonale Hersteller und Einzelstücke.</p>
+          <a class="btn btn-ghost shrink-0" href="https://www.rustikal.de/produkte/">Zu unseren Produkten <span aria-hidden="true">→</span></a>
         </div>
-      </div>
-    </section>
-
-    <!-- ========================== IMPRESSIONEN ========================== -->
-    <section id="impressionen" class="bg-cream py-20 sm:py-28" aria-labelledby="impressionen-titel">
-      <div class="mx-auto max-w-6xl px-5">
-        <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-          <div>
-            <p class="eyebrow">Ladenimpressionen</p>
-            <h2 id="impressionen-titel" class="section-title mt-3">Schauen Sie sich um</h2>
-          </div>
-          <a class="font-medium text-clay underline underline-offset-4 hover:text-clayDark" href="https://www.instagram.com/rustikalundschoen_hamburg/" target="_blank" rel="noopener">
-            Mehr auf Instagram<span class="sr-only"> (öffnet in neuem Tab)</span> →
-          </a>
-        </div>
-
-        <!--
-          Platzhalter: Pro Kachel das <div class="ph"> durch ein Bild ersetzen, z. B.
-          <img src="assets/img/galerie/01.webp" alt="…" width="800" height="1000" loading="lazy" decoding="async" class="h-full w-full object-cover">
-          Wichtig: width/height setzen (verhindert Layout-Sprünge = bessere CLS) und aussagekräftigen alt-Text vergeben.
-        -->
-        <ul class="mt-10 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 lg:grid-rows-2">
-          <li class="relative col-span-2 aspect-[4/3] overflow-hidden rounded-2xl bg-linen lg:row-span-2 lg:aspect-auto">
-            <div class="ph flex h-full min-h-[16rem] items-end p-5 text-sm text-stone">Foto 1 · Schaufenster / Eingang</div>
-          </li>
-          <li class="aspect-square overflow-hidden rounded-2xl bg-sand"><div class="ph flex h-full items-end p-4 text-sm text-stone">Foto 2 · Geschirr &amp; Glas</div></li>
-          <li class="aspect-square overflow-hidden rounded-2xl bg-linen"><div class="ph flex h-full items-end p-4 text-sm text-stone">Foto 3 · Textilien</div></li>
-          <li class="aspect-square overflow-hidden rounded-2xl bg-linen"><div class="ph flex h-full items-end p-4 text-sm text-stone">Foto 4 · Saisonale Deko</div></li>
-          <li class="aspect-square overflow-hidden rounded-2xl bg-sand"><div class="ph flex h-full items-end p-4 text-sm text-stone">Foto 5 · Wendt &amp; Kühn</div></li>
-        </ul>
       </div>
     </section>
 
     <!-- ============================ GUTSCHEIN ============================ -->
-    <section id="gutschein" class="bg-moss py-16 text-cream sm:py-20" aria-labelledby="gutschein-titel">
-      <div class="mx-auto flex max-w-6xl flex-col items-start gap-6 px-5 sm:flex-row sm:items-center sm:justify-between">
-        <div class="max-w-xl">
-          <h2 id="gutschein-titel" class="font-serif text-3xl sm:text-4xl">Das besondere Geschenk</h2>
-          <p class="mt-3 text-lg leading-relaxed text-cream/90">Unsicher, was gefällt? Ein Gutschein von Rustikal &amp; Schön lässt die Wahl – und die Freude – ganz bei den Beschenkten.</p>
+    <section id="gutschein" class="grain overflow-hidden bg-moss py-24 text-cream sm:py-28" aria-labelledby="gutschein-titel">
+      <div class="pointer-events-none absolute -right-24 -top-24 -z-10 h-96 w-96 rounded-full bg-olive/40 blur-3xl" aria-hidden="true"></div>
+      <div class="container-x grid items-center gap-16 lg:grid-cols-2">
+        <div data-reveal>
+          <p class="eyebrow !text-wheat">Gutscheine</p>
+          <h2 id="gutschein-titel" class="mt-5 font-serif text-[2.5rem] font-light leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">Das besondere <em class="italic text-wheat">Geschenk</em></h2>
+          <p class="mt-6 max-w-lg text-pretty text-lg leading-relaxed text-cream/90">Unsicher, was gefällt? Ein Gutschein von Rustikal &amp; Schön lässt die Wahl – und die Freude – ganz bei den Beschenkten.</p>
+          <a class="btn btn-light mt-9" href="https://www.rustikal.de/gutscheine-geschenke-hamburg-volksdorf/">Zu den Gutscheinen <span aria-hidden="true">→</span></a>
         </div>
-        <a class="btn bg-cream text-bark hover:bg-sand" href="https://www.rustikal.de/gutscheine-geschenke-hamburg-volksdorf/">Zu den Gutscheinen</a>
+
+        <div class="relative mx-auto w-full max-w-md py-6" data-reveal style="--d:150ms" aria-hidden="true">
+          <div class="absolute inset-x-0 inset-y-6 rotate-6 rounded-3xl bg-ochre/80"></div>
+          <div class="relative aspect-[16/10] -rotate-3 overflow-hidden rounded-3xl bg-cream p-7 text-bark shadow-2xl shadow-black/30 transition-transform duration-700 hover:rotate-0 sm:p-9">
+            <div class="absolute inset-y-0 left-[74%] w-4 bg-clay"></div>
+            <div class="absolute inset-x-0 top-[56%] h-4 bg-clay"></div>
+            <svg class="absolute left-[74%] top-[56%] ml-2 mt-2 h-14 w-20 -translate-x-1/2 -translate-y-1/2" viewBox="0 0 80 50">
+              <path d="M40 25 C 25 4, 4 7, 7 22 C 9 35, 28 33, 40 25 Z" fill="#7C3F22"/>
+              <path d="M40 25 C 55 4, 76 7, 73 22 C 71 35, 52 33, 40 25 Z" fill="#7C3F22"/>
+              <path d="M38 27 L 27 49 L 34 47 L 40 31 Z" fill="#9A5230"/>
+              <path d="M42 27 L 53 49 L 46 47 L 40 31 Z" fill="#9A5230"/>
+              <circle cx="40" cy="25" r="6.5" fill="#9A5230"/>
+            </svg>
+            <p class="text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-stone">Rustikal &amp; Schön</p>
+            <p class="mt-1 font-serif text-5xl italic sm:text-6xl">Gutschein</p>
+            <div class="absolute bottom-7 left-7 right-[34%] sm:bottom-9 sm:left-9">
+              <p class="text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-stone">Für</p>
+              <p class="mt-1 border-b border-dashed border-bark/30 pb-1 font-serif text-lg italic">Ihre Liebsten</p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- ========================= SERVICE & KONTAKT ========================= -->
-    <section id="kontakt" class="bg-cream py-20 sm:py-28" aria-labelledby="kontakt-titel">
-      <div class="mx-auto max-w-6xl px-5">
-        <p class="eyebrow">Service &amp; Kontakt</p>
-        <h2 id="kontakt-titel" class="section-title mt-3">Besuchen Sie uns in Volksdorf</h2>
+    <section id="kontakt" class="bg-cream py-24 sm:py-32" aria-labelledby="kontakt-titel">
+      <div class="container-x">
+        <div data-reveal>
+          <p class="eyebrow">Service &amp; Kontakt</p>
+          <h2 id="kontakt-titel" class="section-title mt-5">Besuchen Sie uns <em class="italic text-clay">in Volksdorf</em></h2>
+        </div>
 
-        <div class="mt-12 grid gap-10 lg:grid-cols-2">
-          <div class="space-y-10">
-            <address class="not-italic">
-              <h3 class="font-serif text-xl">Adresse</h3>
+        <div class="mt-14 grid gap-5 lg:grid-cols-12">
+          <div class="grid gap-5 lg:col-span-5">
+            <address class="card not-italic" data-reveal>
+              <h3 class="font-serif text-2xl">Adresse</h3>
               <p class="mt-3 text-lg leading-relaxed">
                 Rustikal &amp; Schön<br>
                 Claus-Ferck-Straße 3<br>
                 22359 Hamburg-Volksdorf
               </p>
-              <ul class="mt-5 space-y-3 text-lg">
+              <ul class="mt-5 space-y-2 text-lg">
                 <li>
-                  <a class="inline-flex min-h-[44px] items-center gap-3 font-medium text-clay underline underline-offset-4 hover:text-clayDark" href="tel:+494060391070">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
+                  <a class="group inline-flex min-h-[44px] items-center gap-3 font-medium text-clay hover:text-clayDark" href="tel:+494060391070">
+                    <span class="flex h-10 w-10 items-center justify-center rounded-full bg-clay/10 transition group-hover:bg-clay group-hover:text-cream" aria-hidden="true">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
+                    </span>
                     040 / 603 91 07
                   </a>
                 </li>
                 <li>
-                  <a class="inline-flex min-h-[44px] items-center gap-3 font-medium text-clay underline underline-offset-4 hover:text-clayDark" href="mailto:verkauf@rustikal.de">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+                  <a class="group inline-flex min-h-[44px] items-center gap-3 font-medium text-clay hover:text-clayDark" href="mailto:verkauf@rustikal.de">
+                    <span class="flex h-10 w-10 items-center justify-center rounded-full bg-clay/10 transition group-hover:bg-clay group-hover:text-cream" aria-hidden="true">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+                    </span>
                     verkauf@rustikal.de
                   </a>
                 </li>
               </ul>
             </address>
 
-            <div>
-              <h3 class="font-serif text-xl">Öffnungszeiten</h3>
-              <p class="mt-2 flex items-center gap-2" role="status">
-                <span class="status-dot inline-block h-2.5 w-2.5 rounded-full bg-stone" aria-hidden="true"></span>
-                <span data-open-status class="font-medium">…</span>
-              </p>
-              <table class="mt-4 w-full max-w-sm text-lg">
+            <div class="card" data-reveal style="--d:100ms">
+              <div class="flex flex-wrap items-center justify-between gap-3">
+                <h3 class="font-serif text-2xl">Öffnungszeiten</h3>
+                <p class="inline-flex items-center gap-2 rounded-full bg-sand px-3 py-1.5 text-sm font-medium" role="status">
+                  <span class="status-dot relative inline-flex h-2 w-2 rounded-full bg-stone" aria-hidden="true"></span>
+                  <span data-open-status>…</span>
+                </p>
+              </div>
+              <table class="mt-5 w-full text-base sm:text-lg">
                 <caption class="sr-only">Öffnungszeiten</caption>
                 <tbody class="divide-y divide-linen">
-                  <tr><th scope="row" class="py-3 text-left font-normal">Montag – Freitag</th><td class="py-3 text-right font-medium">10:00 – 18:00 Uhr</td></tr>
-                  <tr><th scope="row" class="py-3 text-left font-normal">Samstag</th><td class="py-3 text-right font-medium">10:00 – 14:00 Uhr</td></tr>
-                  <tr><th scope="row" class="py-3 text-left font-normal text-stone">Sonntag</th><td class="py-3 text-right text-stone">geschlossen</td></tr>
+                  <tr data-days="1 2 3 4 5"><th scope="row" class="whitespace-nowrap py-3 text-left font-normal">Montag – Freitag</th><td class="whitespace-nowrap py-3 text-right font-medium">10:00 – 18:00 Uhr</td></tr>
+                  <tr data-days="6"><th scope="row" class="py-3 text-left font-normal">Samstag</th><td class="whitespace-nowrap py-3 text-right font-medium">10:00 – 14:00 Uhr</td></tr>
+                  <tr data-days="0"><th scope="row" class="py-3 text-left font-normal text-stone">Sonntag</th><td class="py-3 text-right text-stone">geschlossen</td></tr>
                 </tbody>
               </table>
-              <p class="mt-3 text-sm text-stone">Abweichende Zeiten an Feiertagen und zur Weihnachtszeit bitte telefonisch erfragen.</p>
+              <p class="mt-4 text-sm text-stone">Abweichende Zeiten an Feiertagen und zur Weihnachtszeit bitte telefonisch erfragen.</p>
             </div>
           </div>
 
           <!-- Karte: lädt erst nach Klick (DSGVO) -->
-          <div>
-            <div id="map-box" class="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-linen bg-sand lg:aspect-auto lg:h-full lg:min-h-[26rem]">
-              <div class="flex h-full flex-col items-center justify-center gap-4 p-6 text-center">
-                <svg class="h-10 w-10 text-clay" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-                <p class="max-w-sm text-stone">
+          <div class="lg:col-span-7" data-reveal style="--d:150ms">
+            <div id="map-box" class="relative h-full min-h-[36rem] sm:min-h-[30rem] overflow-hidden rounded-3xl border border-linen bg-sand">
+              <svg class="absolute inset-0 h-full w-full" viewBox="0 0 600 450" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                <rect width="600" height="450" fill="#EFE6D8"/>
+                <path d="M380 30 C 470 20, 570 70, 600 150 L 600 190 C 520 200, 430 175, 392 120 Z" fill="#7E8A5E" fill-opacity=".28"/>
+                <path d="M-10 360 C 60 340, 110 380, 170 450 L -10 450 Z" fill="#7E8A5E" fill-opacity=".22"/>
+                <g fill="#E4D6C2">
+                  <rect x="60" y="150" width="120" height="70" rx="10"/>
+                  <rect x="300" y="250" width="110" height="80" rx="10"/>
+                  <rect x="440" y="250" width="120" height="60" rx="10"/>
+                  <rect x="40" y="20" width="150" height="80" rx="10"/>
+                  <rect x="300" y="360" width="140" height="70" rx="10"/>
+                </g>
+                <g fill="none" stroke="#FAF6F0" stroke-linecap="round">
+                  <path d="M-20 300 C 150 280, 300 250, 620 210" stroke-width="16"/>
+                  <path d="M250 -20 C 268 120, 276 300, 236 470" stroke-width="16"/>
+                  <path d="M-20 125 C 120 140, 220 150, 620 90" stroke-width="8"/>
+                  <path d="M430 -20 L 392 470" stroke-width="8"/>
+                  <path d="M60 470 C 120 360, 180 320, 250 290" stroke-width="8"/>
+                </g>
+                <circle class="pulse-ring" cx="300" cy="150" r="12" fill="#9A5230" fill-opacity=".35"/>
+                <g transform="translate(273.6 103.8) scale(2.2)">
+                  <path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11z" fill="#9A5230"/>
+                  <circle cx="12" cy="10" r="2.6" fill="#FAF6F0"/>
+                </g>
+                <rect x="322" y="112" width="134" height="30" rx="15" fill="#FAF6F0"/>
+                <text x="389" y="132" text-anchor="middle" font-size="13" font-weight="600" fill="#3B2F27">Rustikal &amp; Schön</text>
+              </svg>
+
+              <div class="absolute inset-x-4 bottom-4 rounded-2xl border border-white/60 bg-cream/95 p-5 shadow-xl shadow-bark/10 backdrop-blur sm:inset-x-6 sm:bottom-6 sm:p-6">
+                <p class="text-pretty text-sm leading-relaxed text-stone">
                   Die Karte wird erst nach Ihrem Klick von Google Maps geladen. Dabei werden Daten (z. B. Ihre IP-Adresse) an Google übermittelt.
                   Mehr dazu in der <a class="underline underline-offset-2 hover:text-clay" href="https://www.rustikal.de/datenschutz/">Datenschutzerklärung</a>.
                 </p>
-                <button id="map-load" type="button" class="btn btn-primary">Karte laden</button>
-                <a class="text-clay underline underline-offset-4 hover:text-clayDark" href="https://www.google.com/maps/dir/?api=1&amp;destination=Rustikal+%26+Sch%C3%B6n%2C+Claus-Ferck-Stra%C3%9Fe+3%2C+22359+Hamburg" target="_blank" rel="noopener">
-                  Oder direkt die Route öffnen<span class="sr-only"> (neuer Tab)</span>
-                </a>
+                <div class="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
+                  <button id="map-load" type="button" class="btn btn-primary">Karte laden</button>
+                  <a class="inline-flex min-h-[44px] items-center font-medium text-clay underline underline-offset-4 hover:text-clayDark" href="https://www.google.com/maps/dir/?api=1&amp;destination=Rustikal+%26+Sch%C3%B6n%2C+Claus-Ferck-Stra%C3%9Fe+3%2C+22359+Hamburg" target="_blank" rel="noopener">
+                    Oder direkt die Route öffnen<span class="sr-only"> (neuer Tab)</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -334,26 +668,39 @@
   </main>
 
   <!-- ============================ FOOTER ============================ -->
-  <footer class="border-t border-linen bg-bark pb-28 pt-12 text-cream/90 md:pb-12">
-    <div class="mx-auto flex max-w-6xl flex-col gap-8 px-5 md:flex-row md:items-start md:justify-between">
-      <div>
-        <p class="font-serif text-xl uppercase tracking-wordmark text-cream">Rustikal &amp; Schön</p>
-        <p class="mt-3 leading-relaxed">Claus-Ferck-Straße 3 · 22359 Hamburg-Volksdorf<br>Tel. 040 / 603 91 07</p>
+  <footer class="grain overflow-hidden bg-bark pb-28 pt-20 text-cream/85 md:pb-10">
+    <div class="container-x grid gap-12 md:grid-cols-12">
+      <div class="md:col-span-5">
+        <p class="font-serif text-3xl text-cream">Rustikal <span class="italic text-ochre">&amp;</span> Schön</p>
+        <p class="mt-4 max-w-sm leading-relaxed">Geschenke, Deko und Wohnaccessoires – ausgesucht mit Sorgfalt, mitten in Hamburg-Volksdorf.</p>
+        <a class="mt-6 inline-flex min-h-[44px] items-center gap-2 font-medium text-cream underline-offset-4 hover:text-ochre hover:underline" href="https://www.instagram.com/rustikalundschoen_hamburg/" target="_blank" rel="noopener">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+          @rustikalundschoen_hamburg<span class="sr-only"> auf Instagram (öffnet in neuem Tab)</span>
+        </a>
       </div>
-      <nav aria-label="Rechtliches">
-        <ul class="flex flex-wrap gap-x-6 gap-y-1">
-          <li><a class="inline-block py-2 underline-offset-4 hover:underline" href="https://www.rustikal.de/impressum/">Impressum</a></li>
-          <li><a class="inline-block py-2 underline-offset-4 hover:underline" href="https://www.rustikal.de/datenschutz/">Datenschutz</a></li>
-          <li><a class="inline-block py-2 underline-offset-4 hover:underline" href="https://www.rustikal.de/agb/">AGB</a></li>
-          <li><a class="inline-block py-2 underline-offset-4 hover:underline" href="https://www.rustikal.de/widerrufsbelehrung/">Widerrufsbelehrung</a></li>
+      <div class="md:col-span-4">
+        <p class="text-xs font-semibold uppercase tracking-[0.22em] text-ochre">Besuch</p>
+        <p class="mt-4 leading-relaxed">Claus-Ferck-Straße 3<br>22359 Hamburg-Volksdorf<br><a class="hover:text-ochre" href="tel:+494060391070">Tel. 040 / 603 91 07</a></p>
+        <p class="mt-4 leading-relaxed">Mo–Fr 10–18 Uhr · Sa 10–14 Uhr</p>
+      </div>
+      <nav class="md:col-span-3" aria-label="Rechtliches">
+        <p class="text-xs font-semibold uppercase tracking-[0.22em] text-ochre">Rechtliches</p>
+        <ul class="mt-3">
+          <li><a class="inline-block py-1.5 underline-offset-4 hover:text-ochre hover:underline" href="https://www.rustikal.de/impressum/">Impressum</a></li>
+          <li><a class="inline-block py-1.5 underline-offset-4 hover:text-ochre hover:underline" href="https://www.rustikal.de/datenschutz/">Datenschutz</a></li>
+          <li><a class="inline-block py-1.5 underline-offset-4 hover:text-ochre hover:underline" href="https://www.rustikal.de/agb/">AGB</a></li>
+          <li><a class="inline-block py-1.5 underline-offset-4 hover:text-ochre hover:underline" href="https://www.rustikal.de/widerrufsbelehrung/">Widerrufsbelehrung</a></li>
         </ul>
       </nav>
     </div>
-    <p class="mx-auto mt-8 max-w-6xl px-5 text-sm text-cream/60">© <span id="year">2026</span> Rustikal &amp; Schön</p>
+
+    <p class="container-x mt-16 select-none whitespace-nowrap font-serif text-[14.5vw] font-light leading-[0.85] tracking-tight text-cream/[0.08] xl:text-[11.5rem]" aria-hidden="true">Rustikal &amp; Schön</p>
+
+    <div class="container-x mt-6"><p class="border-t border-cream/10 pt-6 text-sm text-cream/60">© <span id="year">2026</span> Rustikal &amp; Schön · Hamburg-Volksdorf</p></div>
   </footer>
 
   <!-- Mobile Schnellzugriff: Anrufen · Route · Zeiten -->
-  <nav aria-label="Schnellzugriff" class="fixed inset-x-0 bottom-0 z-40 border-t border-linen bg-cream/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden">
+  <nav aria-label="Schnellzugriff" class="fixed inset-x-3 bottom-3 z-40 overflow-hidden rounded-2xl border border-linen bg-cream/95 pb-[env(safe-area-inset-bottom)] shadow-xl shadow-bark/15 backdrop-blur md:hidden">
     <ul class="grid grid-cols-3 text-sm font-medium">
       <li>
         <a class="flex min-h-[56px] flex-col items-center justify-center gap-0.5 hover:bg-sand" href="tel:+494060391070">
@@ -362,7 +709,7 @@
         </a>
       </li>
       <li>
-        <a class="flex min-h-[56px] flex-col items-center justify-center gap-0.5 hover:bg-sand" href="https://www.google.com/maps/dir/?api=1&amp;destination=Rustikal+%26+Sch%C3%B6n%2C+Claus-Ferck-Stra%C3%9Fe+3%2C+22359+Hamburg" target="_blank" rel="noopener">
+        <a class="flex min-h-[56px] flex-col items-center justify-center gap-0.5 bg-clay text-cream hover:bg-clayDark" href="https://www.google.com/maps/dir/?api=1&amp;destination=Rustikal+%26+Sch%C3%B6n%2C+Claus-Ferck-Stra%C3%9Fe+3%2C+22359+Hamburg" target="_blank" rel="noopener">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
           Route<span class="sr-only"> (neuer Tab)</span>
         </a>

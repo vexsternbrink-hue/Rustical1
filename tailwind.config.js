@@ -13,15 +13,30 @@ module.exports = {
         moss: "#4F5F44",
         bark: "#3B2F27", // Haupttextfarbe, 12:1 auf cream
         stone: "#6B5D52", // Sekundärtext, 5.9:1 auf cream
+        // Nur für Illustrationen und Flächen, nicht für Text auf cream
+        ochre: "#C8964A",
+        olive: "#7E8A5E",
+        wheat: "#F2D3A0", // Akzent-Text auf moss/bark, 4.8:1 auf moss
       },
       fontFamily: {
-        // Systemschriften = keine externen Requests (schnell + DSGVO-sicher).
-        // Optional selbst hosten: siehe README ("Schriften").
-        serif: ['"Iowan Old Style"', '"Palatino Linotype"', "Palatino", "Georgia", "Cambria", "serif"],
-        sans: ["ui-sans-serif", "system-ui", "-apple-system", '"Segoe UI"', "Roboto", "Helvetica", "Arial", "sans-serif"],
+        // Selbst gehostet (assets/fonts), keine externen Requests – DSGVO-sicher.
+        serif: ["Fraunces", '"Iowan Old Style"', '"Palatino Linotype"', "Palatino", "Georgia", "serif"],
+        sans: ["Inter", "ui-sans-serif", "system-ui", "-apple-system", '"Segoe UI"', "Roboto", "Helvetica", "Arial", "sans-serif"],
       },
-      letterSpacing: {
-        wordmark: "0.18em",
+      keyframes: {
+        marquee: {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-8px)" },
+        },
+      },
+      animation: {
+        marquee: "marquee 45s linear infinite",
+        float: "float 6s ease-in-out infinite",
+        "spin-slow": "spin 30s linear infinite",
       },
     },
   },
