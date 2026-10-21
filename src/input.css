@@ -140,6 +140,8 @@
   }
 
   .rule {
+    /* Fallback für Browser ohne color-mix() (Safari < 16.2, Firefox < 113) */
+    border-color: rgba(128, 118, 104, 0.32);
     border-color: color-mix(in srgb, currentColor 18%, transparent);
   }
 
@@ -334,9 +336,22 @@
   backface-visibility: hidden;
   outline: 1px solid transparent;
 }
-.etikett:hover .arch {
-  background-color: #1f3b32;
-  color: #c59a4a;
+/* Nur bei echter Maus – auf iOS bliebe der Hover-Zustand nach dem Antippen hängen */
+@media (hover: hover) {
+  .etikett:hover .arch {
+    background-color: #1f3b32;
+    color: #c59a4a;
+  }
+}
+
+/* Gedrehte Gutscheinkarte darf nicht seitlich überstehen (clip mit Fallback) */
+#gutschein {
+  overflow-x: hidden;
+}
+@supports (overflow: clip) {
+  #gutschein {
+    overflow-x: clip;
+  }
 }
 
 /* Heute in den Öffnungszeiten */

@@ -5,11 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#F3EDE3">
   <script>
-    document.documentElement.classList.add("js");
-    try {
-      if (sessionStorage.getItem("rs-intro")) document.documentElement.classList.add("intro-seen");
-      else sessionStorage.setItem("rs-intro", "1");
-    } catch (e) {}
+    // Vorspann nur beim direkten Aufruf zeigen – nicht beim Neuladen, Zurückspringen
+    // oder Wechsel von einer eigenen Unterseite. Es wird nichts auf dem Gerät gespeichert.
+    (function (root) {
+      root.classList.add("js");
+      var nav = window.performance && performance.getEntriesByType ? performance.getEntriesByType("navigation")[0] : null;
+      var internal = document.referrer && document.referrer.indexOf(location.origin) === 0;
+      if ((nav && nav.type !== "navigate") || internal) root.classList.add("intro-seen");
+    })(document.documentElement);
   </script>
 
   <title>Geschenke &amp; Deko in Hamburg-Volksdorf | Rustikal &amp; Schön</title>
@@ -25,7 +28,14 @@
   <meta property="og:description" content="Alles Gute für Ihr Zuhause: Handwerkskunst, Naturprodukte und europäische Fertigung seit vielen Jahren in Volksdorf.">
   <meta property="og:url" content="https://www.rustikal.de/">
   <meta property="og:image" content="https://www.rustikal.de/assets/img/og-image.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Rustikal &amp; Schön – Alles Gute für Ihr Zuhause. Geschenke, Deko und Wohnaccessoires in Hamburg-Volksdorf">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Rustikal &amp; Schön – Geschenke, Deko &amp; Design in Hamburg-Volksdorf">
+  <meta name="twitter:description" content="Alles Gute für Ihr Zuhause: Handwerkskunst, Naturprodukte und europäische Fertigung seit vielen Jahren in Volksdorf.">
+  <meta name="twitter:image" content="https://www.rustikal.de/assets/img/og-image.jpg">
 
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 
@@ -123,9 +133,9 @@
       </nav>
 
       <div class="hidden items-center gap-7 lg:flex">
-        <p class="label flex items-center gap-2.5 text-inkSoft" role="status">
+        <p class="label hidden items-center gap-2.5 whitespace-nowrap text-inkSoft xl:flex" role="status">
           <span class="status-dot relative inline-block h-2 w-2 rounded-full bg-inkSoft/40" aria-hidden="true"></span>
-          <span data-open-status>Öffnungszeiten werden geladen …</span>
+          <span data-open-status="short">…</span>
         </p>
         <a class="btn btn-forest !min-h-[46px] !px-6 !py-3" href="#besuch" data-magnetic>Besuch <span aria-hidden="true">→</span></a>
       </div>
@@ -561,7 +571,7 @@
     </section>
 
     <!-- ============================ GUTSCHEIN ============================ -->
-    <section id="gutschein" class="overflow-x-clip bg-linen py-28 lg:py-40" aria-labelledby="gutschein-titel">
+    <section id="gutschein" class="bg-linen py-28 lg:py-40" aria-labelledby="gutschein-titel">
       <div class="container-x grid items-center gap-16 lg:grid-cols-12">
         <div class="lg:col-span-5">
           <p class="label" data-reveal>(04) — Gutscheine</p>
