@@ -1,11 +1,26 @@
-/* Rustikal & Schön – JavaScript ohne Framework, ohne Tracking */
+/* Rustikal & Schön – JavaScript ohne Framework, ohne Tracking.
+   Einzige Bibliothek: Lenis (weiches Scrollen, MIT, lokal in assets/js/vendor). */
 (function () {
   "use strict";
 
   var root = document.documentElement;
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  var introShowing = root.classList.contains("js") && !root.classList.contains("intro-seen") && !reduceMotion;
 
-  /* 1. Mobiles Vollbild-Menü ---------------------------------------------- */
+  /* 1. Weiches Scrollen (nur Desktop mit Maus, nicht bei reduzierter Bewegung) */
+  var lenis = null;
+  if (window.Lenis && finePointer && !reduceMotion) {
+    // Anker-Sprünge nutzen das scroll-padding-top aus dem CSS (Platz für die Kopfzeile)
+    lenis = new window.Lenis({ duration: 1.15, smoothWheel: true, anchors: true });
+    var raf = function (time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    };
+    requestAnimationFrame(raf);
+  }
+
+  /* 2. Mobiles Vollbild-Menü ---------------------------------------------- */
   var toggle = document.getElementById("menu-toggle");
   var menu = document.getElementById("mobile-menu");
   var closeBtn = document.getElementById("menu-close");
@@ -45,7 +60,7 @@
     });
   }
 
-  /* 2. „Jetzt geöffnet?“ – berechnet in der Zeitzone Europa/Berlin ------- */
+  /* 3. „Jetzt geöffnet?“ – berechnet in der Zeitzone Europa/Berlin ------- */
   var HOURS = {
     1: [10, 18], 2: [10, 18], 3: [10, 18], 4: [10, 18], 5: [10, 18], // Mo–Fr
     6: [10, 14], // Sa
@@ -110,7 +125,7 @@
     markToday();
   }, 60000);
 
-  /* 3. Google Maps erst nach Klick laden (DSGVO: Zwei-Klick-Lösung) ------ */
+  /* 4. Google Maps erst nach Klick laden (DSGVO: Zwei-Klick-Lösung) ------ */
   var mapBtn = document.getElementById("map-load");
   var mapBox = document.getElementById("map-box");
   if (mapBtn && mapBox) {
@@ -126,154 +141,194 @@
       iframe.className = "absolute inset-0 h-full w-full border-0";
       iframe.allowFullscreen = true;
       mapBox.replaceChildren(iframe);
+      mapBtn.disabled = true;
+      mapBtn.textContent = "Karte geladen";
     });
   }
 
-  /* 4. Hero-Bild zoomt nach dem Laden heran ------------------------------- */
-  requestAnimationFrame(function () {
-    document.body.classList.add("is-loaded");
+  /* 5. Linien-Illustrationen vorbereiten: jede Linie bekommt die Länge 1 --- */
+  var SHAPES = "path, circle, ellipse, line, rect, polyline, polygon, use";
+  var drawings = document.querySelectorAll(".draw");
+  drawings.forEach(function (svg) {
+    svg.querySelectorAll(SHAPES).forEach(function (el, i) {
+      if (el.classList.contains("fill")) return;
+      if (el.tagName.toLowerCase() !== "use") el.setAttribute("pathLength", "1");
+      el.style.setProperty("--i", String(i));
+    });
+    svg.classList.add("is-ready");
   });
 
-  /* 5. Inhalte beim Scrollen einblenden ----------------------------------- */
-  var revealEls = document.querySelectorAll("[data-reveal], [data-reveal-group], [data-reveal-img]");
+  /* 6. Inhalte beim Scrollen einblenden ----------------------------------- */
+  var revealEls = document.querySelectorAll("[data-reveal], [data-reveal-group], .draw");
+  var reveal = function (el) {
+    el.classList.add(el.classList.contains("draw") ? "is-drawn" : "is-visible");
+  };
   if ("IntersectionObserver" in window && !reduceMotion) {
-    // Bilder mit clip-path zählen für den Observer als unsichtbar – daher den
-    // Elterncontainer beobachten und das Bild selbst freischalten.
-    var targets = new Map();
     var io = new IntersectionObserver(
       function (entries) {
         entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            (targets.get(entry.target) || entry.target).classList.add("is-visible");
-            io.unobserve(entry.target);
-          }
+          if (!entry.isIntersecting) return;
+          io.unobserve(entry.target);
+          reveal(entry.target);
         });
       },
-      { rootMargin: "0px 0px -10% 0px", threshold: 0.12 }
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.1 }
     );
-    revealEls.forEach(function (el) {
-      var watch = el.hasAttribute("data-reveal-img") ? el.parentElement : el;
-      targets.set(watch, el);
-      io.observe(watch);
-    });
+    // Beim ersten Besuch erst nach dem Vorspann starten
+    setTimeout(function () {
+      revealEls.forEach(function (el) { io.observe(el); });
+    }, introShowing ? 1500 : 0);
   } else {
-    revealEls.forEach(function (el) { el.classList.add("is-visible"); });
+    revealEls.forEach(reveal);
   }
 
-  /* 6. Scroll-Effekte: Kopfzeile, Parallaxe, waagerechte Galerie ---------- */
-  var header = document.getElementById("site-header");
-  var parallaxEls = reduceMotion ? [] : Array.prototype.slice.call(document.querySelectorAll("[data-parallax]"));
-  var hscroll = document.querySelector(".hscroll");
-  var hTrack = hscroll && hscroll.querySelector(".hscroll-track");
-  var hBar = hscroll && hscroll.querySelector(".hscroll-progress span");
-  var wideScreen = window.matchMedia("(min-width: 1024px)");
-  var pinned = false;
-  var hDistance = 0;
-  var lastY = window.scrollY;
-  var ticking = false;
-
-  function layoutGallery() {
-    if (!hscroll || !hTrack) return;
-    pinned = wideScreen.matches && !reduceMotion;
-    hscroll.classList.toggle("is-pinned", pinned);
-    if (pinned) {
-      hTrack.parentElement.scrollLeft = 0;
-      hDistance = Math.max(0, hTrack.scrollWidth - window.innerWidth);
-      hscroll.style.height = window.innerHeight + hDistance + "px";
-    } else {
-      hscroll.style.height = "";
-      hTrack.style.transform = "";
-    }
-  }
-
-  function onScroll() {
-    ticking = false;
-    var y = window.scrollY;
-
-    if (header) {
-      header.dataset.hidden = String(y > lastY && y > 400 && root.style.overflow !== "hidden");
-    }
-    lastY = y;
-
-    var vh = window.innerHeight;
-    parallaxEls.forEach(function (el) {
-      var r = el.parentElement.getBoundingClientRect();
-      if (r.bottom < 0 || r.top > vh) return;
-      var speed = parseFloat(el.dataset.parallax) || 0.2;
-      var offset = (r.top + r.height / 2 - vh / 2) * -speed;
-      el.style.transform = "translate3d(0," + offset.toFixed(1) + "px,0)";
+  /* 7. Etiketten im Sortiment: Zeichnung beim Hover neu ziehen, leicht neigen */
+  document.querySelectorAll(".etikett").forEach(function (card) {
+    var svg = card.querySelector(".draw");
+    var arch = card.querySelector(".arch");
+    card.addEventListener("mouseenter", function () {
+      if (!svg || reduceMotion) return;
+      svg.classList.remove("redraw");
+      void svg.getBoundingClientRect();
+      svg.classList.add("redraw");
     });
-
-    if (pinned) {
-      var top = hscroll.getBoundingClientRect().top;
-      var progress = Math.min(1, Math.max(0, -top / (hDistance || 1)));
-      hTrack.style.transform = "translate3d(" + (-progress * hDistance).toFixed(1) + "px,0,0)";
-      if (hBar) hBar.style.transform = "scaleX(" + progress.toFixed(4) + ")";
-    }
-  }
-
-  function requestTick() {
-    if (!ticking) {
-      ticking = true;
-      requestAnimationFrame(onScroll);
-    }
-  }
-
-  layoutGallery();
-  onScroll();
-  window.addEventListener("scroll", requestTick, { passive: true });
-  window.addEventListener("resize", function () {
-    layoutGallery();
-    requestTick();
+    if (!finePointer || reduceMotion || !arch) return;
+    arch.style.transition = "background-color 0.7s cubic-bezier(0.19, 1, 0.22, 1), color 0.7s, transform 0.6s cubic-bezier(0.19, 1, 0.22, 1)";
+    card.addEventListener("mousemove", function (e) {
+      var r = arch.getBoundingClientRect();
+      var x = (e.clientX - r.left) / r.width - 0.5;
+      var y = (e.clientY - r.top) / r.height - 0.5;
+      arch.style.transform = "perspective(900px) rotateY(" + (x * 7).toFixed(2) + "deg) rotateX(" + (-y * 7).toFixed(2) + "deg)";
+    });
+    card.addEventListener("mouseleave", function () {
+      arch.style.transform = "";
+    });
   });
-  // Bilder in der Galerie ändern beim Laden die Breite der Spur
-  if (hTrack) {
-    hTrack.querySelectorAll("img").forEach(function (img) {
-      if (!img.complete) img.addEventListener("load", layoutGallery);
+
+  /* 8. Gutscheinkarte neigt sich zur Maus, Glanz folgt ------------------- */
+  var gift = document.querySelector("[data-giftcard]");
+  if (gift && finePointer && !reduceMotion) {
+    var area = gift.parentElement;
+    area.addEventListener("mousemove", function (e) {
+      var r = gift.getBoundingClientRect();
+      var x = (e.clientX - r.left) / r.width;
+      var y = (e.clientY - r.top) / r.height;
+      gift.style.setProperty("--ry", ((x - 0.5) * 16).toFixed(2) + "deg");
+      gift.style.setProperty("--rx", ((0.5 - y) * 12).toFixed(2) + "deg");
+      gift.style.setProperty("--mx", (x * 100).toFixed(1) + "%");
+      gift.style.setProperty("--my", (y * 100).toFixed(1) + "%");
+    });
+    area.addEventListener("mouseleave", function () {
+      gift.style.setProperty("--rx", "0deg");
+      gift.style.setProperty("--ry", "0deg");
     });
   }
 
-  /* 7. Sortiment: Bildvorschau folgt dem Mauszeiger ----------------------- */
-  var list = document.getElementById("sortiment-list");
-  var preview = document.getElementById("cursor-preview");
-  var finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
-  if (list && preview && finePointer.matches) {
-    var imgs = preview.querySelectorAll("img");
-    var pos = { x: 0, y: 0 };
-    var target = { x: 0, y: 0 };
-    var running = false;
-
-    var follow = function () {
-      pos.x += (target.x - pos.x) * (reduceMotion ? 1 : 0.14);
-      pos.y += (target.y - pos.y) * (reduceMotion ? 1 : 0.14);
-      var w = preview.offsetWidth;
-      var h = preview.offsetHeight;
-      preview.style.transform = "translate3d(" + (pos.x - w / 2).toFixed(1) + "px," + (pos.y - h / 2).toFixed(1) + "px,0)";
-      if (running) requestAnimationFrame(follow);
-    };
-
-    list.addEventListener("mouseenter", function (e) {
-      pos.x = target.x = e.clientX;
-      pos.y = target.y = e.clientY;
-      running = true;
-      preview.classList.add("is-active");
-      requestAnimationFrame(follow);
-    });
-    list.addEventListener("mousemove", function (e) {
-      target.x = e.clientX;
-      target.y = e.clientY;
-    });
-    list.addEventListener("mouseleave", function () {
-      running = false;
-      preview.classList.remove("is-active");
-    });
-    list.querySelectorAll(".sortiment-row").forEach(function (row) {
-      row.addEventListener("mouseenter", function () {
-        var idx = parseInt(row.dataset.preview, 10);
-        imgs.forEach(function (img, i) {
-          img.classList.toggle("is-current", i === idx);
-        });
+  /* 9. Magnetische Buttons ----------------------------------------------- */
+  if (finePointer && !reduceMotion) {
+    document.querySelectorAll("[data-magnetic]").forEach(function (btn) {
+      btn.style.transition = "transform 0.5s cubic-bezier(0.19, 1, 0.22, 1), color 0.5s";
+      btn.addEventListener("mousemove", function (e) {
+        var r = btn.getBoundingClientRect();
+        var x = e.clientX - r.left - r.width / 2;
+        var y = e.clientY - r.top - r.height / 2;
+        btn.style.transform = "translate(" + (x * 0.22).toFixed(1) + "px," + (y * 0.32).toFixed(1) + "px)";
+      });
+      btn.addEventListener("mouseleave", function () {
+        btn.style.transform = "";
       });
     });
+  }
+
+  /* 10. Scroll-Effekte: Kopfzeile, Manifest-Wörter, Laufband -------------- */
+  var header = document.getElementById("site-header");
+  var words = [];
+  var manifest = document.querySelector("[data-words]");
+  if (manifest && !reduceMotion) {
+    // Text in Wort-Spans zerlegen (Kursives bleibt erhalten)
+    var wrapWords = function (node) {
+      Array.prototype.slice.call(node.childNodes).forEach(function (child) {
+        if (child.nodeType === 3) {
+          var frag = document.createDocumentFragment();
+          child.textContent.split(/(\s+)/).forEach(function (part) {
+            if (!part) return;
+            if (/^\s+$/.test(part)) {
+              frag.appendChild(document.createTextNode(part));
+            } else {
+              var span = document.createElement("span");
+              span.className = "w";
+              span.textContent = part;
+              frag.appendChild(span);
+              words.push(span);
+            }
+          });
+          child.parentNode.replaceChild(frag, child);
+        } else if (child.nodeType === 1) {
+          wrapWords(child);
+        }
+      });
+    };
+    wrapWords(manifest);
+  }
+
+  var marquees = Array.prototype.slice.call(document.querySelectorAll("[data-marquee]")).map(function (el) {
+    return { el: el, dir: parseFloat(el.dataset.marquee) || 1, x: 0 };
+  });
+  var lastY = window.scrollY;
+  var velocity = 0;
+
+  function onScroll() {
+    var y = window.scrollY;
+    var delta = y - lastY;
+    lastY = y;
+    velocity = Math.max(-40, Math.min(40, delta));
+
+    if (header) {
+      header.dataset.scrolled = String(y > 30);
+      header.dataset.hidden = String(delta > 0 && y > 600 && root.style.overflow !== "hidden");
+    }
+
+    if (words.length) {
+      var r = manifest.getBoundingClientRect();
+      var vh = window.innerHeight;
+      // Fortschritt: beginnt, wenn der Text bei 85 % der Höhe ist, endet bei 35 %
+      var progress = (vh * 0.85 - r.top) / (r.height + vh * 0.5);
+      var count = Math.round(Math.max(0, Math.min(1, progress)) * words.length);
+      for (var i = 0; i < words.length; i++) words[i].classList.toggle("on", i < count);
+    }
+  }
+
+  if (lenis) lenis.on("scroll", onScroll);
+  else window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  // Laufband: läuft immer, wird beim Scrollen schneller und dreht mit der Richtung
+  if (marquees.length && !reduceMotion) {
+    var visible = true;
+    var band = marquees[0].el.parentElement;
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        visible = entries[0].isIntersecting;
+      }).observe(band);
+    }
+    var lastT = performance.now();
+    var tick = function (t) {
+      var dt = Math.min(64, t - lastT);
+      lastT = t;
+      velocity *= 0.92;
+      if (visible) {
+        var boost = 1 + Math.abs(velocity) * 0.18;
+        var sign = velocity < -0.5 ? -1 : 1;
+        marquees.forEach(function (m) {
+          var half = m.el.scrollWidth / 2;
+          m.x -= m.dir * sign * boost * dt * 0.045;
+          if (m.x <= -half) m.x += half;
+          if (m.x > 0) m.x -= half;
+          m.el.style.transform = "translate3d(" + m.x.toFixed(1) + "px,0,0)";
+        });
+      }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
   }
 })();
